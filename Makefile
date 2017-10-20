@@ -1,5 +1,2 @@
 all:
-	go build -o gomake
-
-run:
-	@./gomake
+	@go build -o gomake
