@@ -1,2 +1,2 @@
 all:
-	@go build -o gomake
+	@go build -o gomake *.go
