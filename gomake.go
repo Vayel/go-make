@@ -5,7 +5,6 @@ import (
     "os"
     "path"
     "strings"
-    "os/exec"
 )
 
 func help() {
@@ -33,32 +32,6 @@ func printRules(rules *Rules) {
     }
 }
 
-func getDependentTargets(rule *Rule, rules *Rules) (dependencies []*Rule) {
-    for _, dep := range rule.Dependencies {
-        if r, isPresent := (*rules)[dep]; isPresent { // The dependency is a target itself
-            dependencies = append(dependencies, r)
-        }
-    }
-    return
-}
-
-func execute(target string, rules *Rules) (err error) {
-    rule := (*rules)[target]
-    dependencies := getDependentTargets(rule, rules)
-
-    for _, dep := range dependencies {
-        execute(dep.Target, rules)
-    }
-
-    for _, cmd := range rule.Commands {
-        if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
-            return e
-        }
-    }
-
-    return
-}
-
 func main() {
     if len(os.Args) < 3 {
         fmt.Println("Not enough arguments")
@@ -76,6 +49,7 @@ func main() {
     f, err := os.Open(path)
     if err != nil {
         fmt.Println("Cannot open Makefile:", err)
+        f.Close()
         os.Exit(1)
     }
 
@@ -83,19 +57,14 @@ func main() {
     err = Parse(f, &rules)
     if err != nil {
         fmt.Println("Cannot parse Makefile:", err)
+        f.Close()
         os.Exit(1)
     }
+    f.Close()
 
     target := os.Args[2]
-    if _, isPresent := rules[target]; !isPresent {
-        fmt.Printf("The rule '%s' does not appear in the Makefile\n", target)
-        os.Exit(1)
-    }
-
-    if e := execute(target, &rules); e != nil {
+    if e := Execute(target, &rules); e != nil {
         fmt.Printf("Error executing target '%s': %s\n", target, e)
         os.Exit(1)
     }
-
-    f.Close()
 }
