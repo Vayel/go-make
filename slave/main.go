@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "os"
-    "net/rpc"
+	"fmt"
+	"log"
+	"net/rpc"
+	"os"
 )
 
 /*
@@ -36,35 +36,35 @@ func Execute(target string, rules *Rules) (err error) {
 */
 
 func help() {
-    fmt.Println("Help:")
-    fmt.Println("\tslave master-rpc-addr master-rpc-port")
-    fmt.Println("\nExample:")
-    fmt.Println("\tslave localhost 10000")
+	fmt.Println("Help:")
+	fmt.Println("\tslave master-rpc-addr master-rpc-port")
+	fmt.Println("\nExample:")
+	fmt.Println("\tslave localhost 10000")
 }
 
 func main() {
-    if len(os.Args) < 3 {
-        fmt.Println("Not enough arguments")
-        help()
-        os.Exit(1)
-    }
+	if len(os.Args) < 3 {
+		fmt.Println("Not enough arguments")
+		help()
+		os.Exit(1)
+	}
 
-    addr := os.Args[1]
-    port := os.Args[2]
-    client, err := rpc.Dial("tcp", addr + ":" + port)
+	addr := os.Args[1]
+	port := os.Args[2]
+	client, err := rpc.Dial("tcp", addr+":"+port)
 	if err != nil {
-        log.Fatal(err)
-    }
+		log.Fatal(err)
+	}
 
-    task := Task{}
-    client.Call("MasterService.GiveTask", 0, &task)
+	task := Task{}
+	client.Call("MasterService.GiveTask", 0, &task)
 
-    /*
-    var reply bool
-    for task != nil {
-        result := work(task)
-        client.Call("MasterService.ReceiveResult", &result, &reply)
-        client.Call("MasterService.GiveTask", 0, &task)
-    }
-    */
+	/*
+	   var reply bool
+	   for task != nil {
+	       result := work(task)
+	       client.Call("MasterService.ReceiveResult", &result, &reply)
+	       client.Call("MasterService.GiveTask", 0, &task)
+	   }
+	*/
 }
