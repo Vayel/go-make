@@ -9,10 +9,10 @@ import (
 
 func help() {
     fmt.Println("Help:")
-    fmt.Println("\tgomake path-to-makefile rule-to-execute")
+    fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port")
     fmt.Println("\nExamples:")
-    fmt.Println("\tgomake Makefile all")
-    fmt.Println("\tgomake ../MyMakefile test.c")
+    fmt.Println("\tmaster Makefile all 10000")
+    fmt.Println("\tmaster ../MyMakefile test.c 10000")
 }
 
 func getAbsolutePath(relPath string) (string, error) {
@@ -33,7 +33,7 @@ func printRules(rules *Rules) {
 }
 
 func main() {
-    if len(os.Args) < 3 {
+    if len(os.Args) < 4 {
         fmt.Println("Not enough arguments")
         help()
         os.Exit(1)
@@ -62,9 +62,18 @@ func main() {
     }
     f.Close()
 
+    /*
     target := os.Args[2]
     if e := Execute(target, &rules); e != nil {
         fmt.Printf("Error executing target '%s': %s\n", target, e)
+        os.Exit(1)
+    }
+    */
+
+    port := os.Args[3]
+    err = Serve(port)
+    if err != nil {
+        fmt.Println("Cannot start server:", err)
         os.Exit(1)
     }
 }

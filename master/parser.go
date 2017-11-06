@@ -9,20 +9,6 @@ import (
     "bufio"
 )
 
-const CommandPrefix = "\t"
-const TargetSuffix = ":"
-const (
-    HeaderType = iota
-    CommandType = iota
-    OtherType = iota
-)
-
-type Rule struct {
-	Target string
-	Dependencies []string
-	Commands []string
-}
-
 // The keys are the targets
 // We store pointers to rules and not rules directly to be able to update the struct
 // See https://stackoverflow.com/a/32751792
