@@ -1,3 +1,5 @@
+all: master slave
+
 .PHONY: master
 master:
 	@mkdir -p bin
@@ -11,8 +13,6 @@ slave:
 	@cp common.go slave/ # All .go files must be in the same folder
 	go build -o bin/slave slave/*.go
 	@rm slave/common.go
-
-all: master slave # TODO: the slave rule is not computed
 
 .PHONY: run_slave
 run_slave:
