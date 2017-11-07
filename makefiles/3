@@ -1,0 +1,12 @@
+
+all: one two three
+	echo "all"
+
+one:
+	echo "one"
+
+two: three
+	echo "two"
+
+three:
+	echo "three"

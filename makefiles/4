@@ -1,0 +1,18 @@
+
+all: one
+	echo "all"
+
+one: two
+	echo "one"
+
+two: three
+	echo "two"
+
+fake: two
+	echo "ERROR"
+
+faketwo: all
+	echo "ERROR"
+
+three:
+	echo "three"

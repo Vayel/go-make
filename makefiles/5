@@ -1,0 +1,18 @@
+
+all: one three
+	echo "all"
+
+one:
+	echo "one"
+
+three: four five
+	echo "three"
+
+four: two
+	echo "four"
+
+two: five
+	echo "two"
+
+five:
+	echo "five"
