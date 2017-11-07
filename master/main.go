@@ -7,12 +7,29 @@ import (
 	"strings"
 )
 
+var rulesToParents RulesToParents
+var readyRules []string
+
 func help() {
 	fmt.Println("Help:")
 	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port")
 	fmt.Println("\nExamples:")
 	fmt.Println("\tmaster Makefile all 10000")
 	fmt.Println("\tmaster ../MyMakefile test.c 10000")
+}
+
+func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
+	rule := (*rules)[parent]
+	for _, dep := range rule.Dependencies {
+		if (*mapping)[dep] == nil {
+			(*mapping)[dep] = make([]string, 0)
+		}
+		(*mapping)[dep] = append((*mapping)[dep], parent)
+		linkRulesToParents(rules, dep, mapping)
+	}
+	if len(rule.Dependencies) == 0 {
+		readyRules = append(readyRules, parent)
+	}
 }
 
 func getAbsolutePath(relPath string) (string, error) {
@@ -62,8 +79,11 @@ func main() {
 	}
 	f.Close()
 
+	target := os.Args[2]
+	rulesToParents = make(RulesToParents)
+	linkRulesToParents(&rules, target, &rulesToParents)
+
 	/*
-	   target := os.Args[2]
 	   if e := Execute(target, &rules); e != nil {
 	       fmt.Printf("Error executing target '%s': %s\n", target, e)
 	       os.Exit(1)

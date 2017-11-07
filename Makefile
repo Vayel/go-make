@@ -20,7 +20,10 @@ run_slave:
 
 .PHONY: run_master
 run_master:
-	@./bin/master makefiles/0 all 10000
+	@./bin/master makefiles/$(filter-out run_master, $(MAKECMDGOALS)) all 10000
 
 clean:
 	@rm -r bin
+
+%:
+	@:

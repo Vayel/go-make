@@ -1,9 +1,0 @@
-all: clean x
-	echo b >> a
-
-x: ab c   d
-	touch a
-	echo a >> a
-
-clean:
-	rm a
