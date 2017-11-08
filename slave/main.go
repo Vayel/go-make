@@ -5,35 +5,18 @@ import (
 	"log"
 	"net/rpc"
 	"os"
+    "os/exec"
 )
 
-/*
-func getDependentTargets(rule *Rule, rules *Rules) (dependencies []*Rule) {
-    for _, dep := range rule.Dependencies {
-        if r, isPresent := (*rules)[dep]; isPresent { // The dependency is a target itself
-            dependencies = append(dependencies, r)
-        }
-    }
-    return
-}
-
-func Execute(target string, rules *Rules) (err error) {
-    rule := (*rules)[target]
-    dependencies := getDependentTargets(rule, rules)
-
-    for _, dep := range dependencies {
-        Execute(dep.Target, rules)
-    }
-
-    for _, cmd := range rule.Commands {
+func work(task Task) (err error) {
+    fmt.Println("work on ", task.Rule)
+    for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
             return e
         }
     }
-
     return
 }
-*/
 
 func help() {
 	fmt.Println("Help:")
@@ -57,14 +40,26 @@ func main() {
 	}
 
 	task := Task{}
-	client.Call("MasterService.GiveTask", 0, &task)
+	var result Result
+    var reply bool
+    for {
+        err = client.Call("MasterService.GiveTask", 0, &task)
+        if err != nil {
+            fmt.Println(err)
+            break
+        }
+        if len(task.Rule.Target) == 0 {
+            continue
+        }
 
-	/*
-	   var reply bool
-	   for task != nil {
-	       result := work(task)
-	       client.Call("MasterService.ReceiveResult", &result, &reply)
-	       client.Call("MasterService.GiveTask", 0, &task)
-	   }
-	*/
+        work(task)
+        result = Result{Rule: task.Rule}
+        err = client.Call("MasterService.ReceiveResult", &result, &reply)
+        if err != nil {
+            fmt.Println(err)
+            break
+        }
+
+	    task = Task{}
+    }
 }

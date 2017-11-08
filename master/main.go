@@ -8,7 +8,7 @@ import (
 )
 
 var rulesToParents RulesToParents
-var readyRules []string
+var readyRules Rules // Use a map to avoid duplicates
 
 func help() {
 	fmt.Println("Help:")
@@ -28,7 +28,7 @@ func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
 		linkRulesToParents(rules, dep, mapping)
 	}
 	if len(rule.Dependencies) == 0 {
-		readyRules = append(readyRules, parent)
+		readyRules[parent] = rule
 	}
 }
 
@@ -86,15 +86,9 @@ func main() {
         os.Exit(1)
     }
 
+	readyRules = make(Rules)
 	rulesToParents = make(RulesToParents)
 	linkRulesToParents(&rules, target, &rulesToParents)
-
-	/*
-	   if e := Execute(target, &rules); e != nil {
-	       fmt.Printf("Error executing target '%s': %s\n", target, e)
-	       os.Exit(1)
-	   }
-	*/
 
 	port := os.Args[3]
 	err = Serve(port)

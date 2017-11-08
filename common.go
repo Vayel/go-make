@@ -21,8 +21,9 @@ type Task struct {
 }
 
 type Result struct {
-	// TODO: to be determined
-	x int
+    Rule Rule
+    // The generated file
+    // TODO
 }
 
 type RulesToParents map[string][]string

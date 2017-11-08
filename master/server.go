@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+    "fmt"
 	"net"
 	"net/rpc"
 )
@@ -12,14 +12,17 @@ type MasterService int
 
 // Do not care about the parameter `args`
 func (m *MasterService) GiveTask(args *int, reply *Task) error {
-	// TODO
-	fmt.Println("GiveTask called")
-	*reply = Task{}
+    for k, rule := range readyRules {
+        *reply = Task{Rule: *rule}
+        delete(readyRules, k)
+        fmt.Println(reply.Rule)
+        break
+    }
 	return nil
 }
 
-func (m *MasterService) ReceiveResult(args *Result, reply *bool) error {
-	// TODO
+func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
+    fmt.Println("Result: ", result.Rule.Target)
 	return nil
 }
 
