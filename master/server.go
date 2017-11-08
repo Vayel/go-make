@@ -1,7 +1,6 @@
 package main
 
 import (
-    "fmt"
 	"net"
 	"net/rpc"
 )
@@ -15,14 +14,14 @@ func (m *MasterService) GiveTask(args *int, reply *Task) error {
     for k, rule := range readyRules {
         *reply = Task{Rule: *rule}
         delete(readyRules, k)
-        fmt.Println(reply.Rule)
         break
     }
 	return nil
 }
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
-    fmt.Println("Result: ", result.Rule.Target)
+    executedRules[result.Rule.Target] = "TODO: generated file"
+    updateParents(result.Rule.Target)
 	return nil
 }
 

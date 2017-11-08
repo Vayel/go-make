@@ -9,7 +9,7 @@ import (
 )
 
 func work(task Task) (err error) {
-    fmt.Println("work on ", task.Rule)
+    fmt.Println("Working on ", task.Rule.Target)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
             return e

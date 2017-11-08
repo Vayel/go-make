@@ -7,8 +7,10 @@ import (
 	"strings"
 )
 
+var rules Rules
 var rulesToParents RulesToParents
 var readyRules Rules // Use a map to avoid duplicates
+var executedRules ExecutedRules
 
 func help() {
 	fmt.Println("Help:")
@@ -30,6 +32,26 @@ func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
 	if len(rule.Dependencies) == 0 {
 		readyRules[parent] = rule
 	}
+}
+
+func updateParents(child string) {
+    for _, parent := range rulesToParents[child] {
+        if isReady(rules[parent]) {
+		    readyRules[parent] = rules[parent]
+        }
+    }
+}
+
+func isReady(rule *Rule) bool {
+    if _, present := executedRules[rule.Target]; present {
+        return false
+    }
+    for _, dep := range rule.Dependencies {
+        if _, present := executedRules[dep]; !present {
+            return false
+        }
+    }
+    return true
 }
 
 func getAbsolutePath(relPath string) (string, error) {
@@ -70,7 +92,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	rules := make(Rules)
+	rules = make(Rules)
 	err = Parse(f, &rules)
 	if err != nil {
 		fmt.Println("Cannot parse Makefile:", err)
@@ -81,11 +103,12 @@ func main() {
 
 	target := os.Args[2]
 
-    if rules[target] == nil {
+    if _, present := rules[target]; !present {
         fmt.Printf("Invalid target '%s'\n", target)
         os.Exit(1)
     }
 
+	executedRules = make(ExecutedRules)
 	readyRules = make(Rules)
 	rulesToParents = make(RulesToParents)
 	linkRulesToParents(&rules, target, &rulesToParents)
