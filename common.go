@@ -30,3 +30,7 @@ type RulesToParents map[string][]string
 
 // TODO: the value type is not a string but a file
 type ExecutedRules map[string]string
+
+type Slave struct {
+    Todo string
+}

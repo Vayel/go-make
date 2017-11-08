@@ -8,20 +8,25 @@ import (
 // The exposed type does not matter, the client only looks at its exported
 // methods
 type MasterService int
+var waitingSlaves []*Slave
 
 // Do not care about the parameter `args`
-func (m *MasterService) GiveTask(args *int, reply *Task) error {
+func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
     for k, rule := range readyRules {
         *reply = Task{Rule: *rule}
         delete(readyRules, k)
-        break
+	    return nil
     }
+    waitingSlaves = append(waitingSlaves, slave)
 	return nil
 }
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
     executedRules[result.Rule.Target] = "TODO: generated file"
     updateParents(result.Rule.Target)
+
+    // TODO: contact waiting slaves if some work appeared
+
 	return nil
 }
 

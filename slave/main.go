@@ -40,16 +40,17 @@ func main() {
 	}
 
 	task := Task{}
+	slave := Slave{Todo: "todo"}
 	var result Result
     var reply bool
     for {
-        err = client.Call("MasterService.GiveTask", 0, &task)
+        err = client.Call("MasterService.GiveTask", &slave, &task)
         if err != nil {
             fmt.Println(err)
-            break
+            return
         }
         if len(task.Rule.Target) == 0 {
-            continue
+            break
         }
 
         work(task)
@@ -57,9 +58,11 @@ func main() {
         err = client.Call("MasterService.ReceiveResult", &result, &reply)
         if err != nil {
             fmt.Println(err)
-            break
+            return
         }
 
 	    task = Task{}
     }
+
+    // TODO: start RPC server for the master to contact us
 }
