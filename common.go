@@ -33,4 +33,5 @@ type ExecutedRules map[string]string
 
 type Slave struct {
     Todo string
+	Addr string
 }

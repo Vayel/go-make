@@ -40,7 +40,7 @@ func main() {
 	}
 
 	task := Task{}
-	slave := Slave{Todo: "todo"}
+	slave := Slave{Todo: "todo", Addr:"0.0.0.0"} // TODO: get addr
 	var result Result
     var reply bool
     for {
@@ -65,4 +65,12 @@ func main() {
     }
 
     // TODO: start RPC server for the master to contact us
+	// TODO: when task given, close server and back to infinite loop ?
+
+	// if no task given by the master, open a server and wait for a task
+	err = Serve(40000) // TODO: choose port ?
+	if err != nil {
+		fmt.Println("Cannot start server:", err)
+		os.Exit(1)
+	}
 }
