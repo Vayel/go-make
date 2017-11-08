@@ -50,8 +50,8 @@ func printRules(rules *Rules) {
 }
 
 func main() {
-	if len(os.Args) < 4 {
-		fmt.Println("Not enough arguments")
+	if len(os.Args) != 4 {
+		fmt.Println("Invalid number of arguments")
 		help()
 		os.Exit(1)
 	}
@@ -80,6 +80,12 @@ func main() {
 	f.Close()
 
 	target := os.Args[2]
+
+    if rules[target] == nil {
+        fmt.Printf("Invalid target '%s'\n", target)
+        os.Exit(1)
+    }
+
 	rulesToParents = make(RulesToParents)
 	linkRulesToParents(&rules, target, &rulesToParents)
 
