@@ -1,6 +1,7 @@
 package main
 
 import (
+    "fmt"
 	"net"
 	"net/rpc"
 )
@@ -13,6 +14,7 @@ var waitingSlaves []*Slave
 // Do not care about the parameter `args`
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
     for k, rule := range readyRules {
+        // TODO: send dependency files
         *reply = Task{Rule: *rule}
         delete(readyRules, k)
 	    return nil
@@ -22,16 +24,23 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
 }
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
-    executedRules[result.Rule.Target] = "TODO: generated file"
+    // TODO: save generated file
+    executedRules[result.Rule.Target] = "generated file"
     updateParents(result.Rule.Target)
+
+    if result.Rule.Target == firstTarget {
+        terminate()
+        return nil
+    }
 
     // TODO: contact waiting slaves if some work appeared
 
 	return nil
 }
 
-func Serve(port string) error {
-	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
+func Serve(port string, done chan bool) error {
+    addr := "0.0.0.0:" + port
+	addy, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {
 		return err
 	}
@@ -43,6 +52,9 @@ func Serve(port string) error {
 
 	service := new(MasterService)
 	rpc.Register(service)
-	rpc.Accept(inbound)
+	go rpc.Accept(inbound)
+    fmt.Println("RPC server running on", addr)
+    <-done
+    fmt.Println("RPC server turned off")
 	return nil
 }
