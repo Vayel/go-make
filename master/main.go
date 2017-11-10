@@ -91,6 +91,7 @@ func main() {
 		f.Close()
 		os.Exit(1)
 	}
+	defer f.Close()
 
 	rules = make(Rules)
 	err = Parse(f, &rules)
