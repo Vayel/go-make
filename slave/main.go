@@ -64,5 +64,14 @@ func main() {
 	    task = Task{}
     }
 
+	var file []byte
+	slave = Slave{Todo: "todo"}
+	err = client.Call("MasterService.GiveFile", &slave, &file)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(file))
+
     // TODO: start RPC server for the master to contact us
 }
