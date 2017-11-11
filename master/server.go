@@ -42,7 +42,7 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 
 			task := Task{Rule: *rule}
 
-			slaveClient, err := rpc.Dial("tcp", (*slave).Addr+":40000")
+			slaveClient, err := rpc.Dial("tcp", (*slave).Addr)
 			if err != nil {
 				return err
 			}
