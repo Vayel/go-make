@@ -8,7 +8,20 @@ import (
     "os/exec"
 )
 
+var filedir string = "outputfiles/"
+
+func writeFiles(requiredFiles RequiredFiles) error {
+	for filename, bytes := range requiredFiles {
+		err := WriteFile(filedir + filename, bytes)
+		if(err != nil) {
+			return err
+		}
+	}
+	return nil
+}
+
 func work(task Task) (err error) {
+	writeFiles(task.RequiredFiles)
     fmt.Println("Working on ", task.Rule.Target)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
@@ -54,7 +67,12 @@ func main() {
         }
 
         work(task)
-        result = Result{Rule: task.Rule}
+		fileResult, err := ReadFile(filedir + task.Rule.Target)
+		if err != nil {
+            fmt.Println(err)
+			return
+		}
+		result = Result{Rule: task.Rule, Bytes: fileResult}
         err = client.Call("MasterService.ReceiveResult", &result, &reply)
         if err != nil {
             fmt.Println(err)
@@ -63,15 +81,4 @@ func main() {
 
 	    task = Task{}
     }
-
-	var file []byte
-	slave = Slave{Todo: "todo"}
-	err = client.Call("MasterService.GiveFile", &slave, &file)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(string(file))
-
-    // TODO: start RPC server for the master to contact us
 }

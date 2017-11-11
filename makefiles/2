@@ -1,9 +1,9 @@
 
 all: one two
-	echo "all"
+	echo "all" > outputfiles/all
 
 one:
-	echo "one"
+	echo "one" > outputfiles/one
 
 two:
-	echo "two"
+	echo "two" > outputfiles/two

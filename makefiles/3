@@ -1,12 +1,12 @@
 
 all: one two three
-	echo "all"
+	echo "all" > outputfiles/all
 
 one:
-	echo "one"
+	echo "one" > outputfiles/one
 
 two: three
-	echo "two"
+	echo "two" > outputfiles/two
 
 three:
-	echo "three"
+	echo "three" > outputfiles/three
