@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net"
 	"net/rpc"
 )
@@ -47,7 +46,7 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 			if err != nil {
 				return err
 			}
-			err = slaveClient.Call("MasterService.ReceiveTask", &task, nil)
+			err = slaveClient.Call("SlaveService.ReceiveTask", &task, nil)
 			if err != nil {
 				return err
 			}
@@ -63,21 +62,6 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 	}
 
 	return nil
-}
-
-
-// master sends it to a waiting slave to give it a task
-func (m *MasterService) ReceiveTask(task *Task, reply* Result) {
-	// TODO: run task
-
-	// work(task)
-	result := Result{Rule: task.Rule}
-
-	// err := ???.Call("MasterService.ReceiveResult", &result, &reply)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return
 }
 
 
