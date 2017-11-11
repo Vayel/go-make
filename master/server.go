@@ -73,7 +73,7 @@ func (m *MasterService) ReceiveTask(task *Task, reply* Result) {
 	// work(task)
 	result := Result{Rule: task.Rule}
 
-	err := ???.Call("MasterService.ReceiveResult", &result, &reply)
+	// err := ???.Call("MasterService.ReceiveResult", &result, &reply)
 	if err != nil {
 		fmt.Println(err)
 	}
