@@ -38,7 +38,7 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
 			slaveClient.Call("SlaveService.WakeUp", nil, nil)
 		}
-		waitingSlaves = []*Slave{};
+		waitingSlaves = make([]*Slave, 0);
 	}
 	return nil
 }
