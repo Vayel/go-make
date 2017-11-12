@@ -37,9 +37,9 @@ func work(task Task) (err error) {
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tslave master-rpc-addr master-rpc-port")
+	fmt.Println("\tslave master-rpc-addr master-rpc-port result-dir")
 	fmt.Println("\nExample:")
-	fmt.Println("\tslave localhost 10000")
+	fmt.Println("\tslave localhost 10000 result-dir")
 }
 
 func main() {
