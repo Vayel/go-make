@@ -1,0 +1,22 @@
+all: a e
+	date > outputfiles/all
+
+a: b
+	sleep 10
+	date > outputfiles/a
+
+b: c d
+	sleep 10
+	date > outputfiles/b
+
+c:
+	sleep 10
+	date > outputfiles/c
+
+d: e
+	sleep 10
+	date > outputfiles/d
+
+e:
+	sleep 10
+	date > outputfiles/e
