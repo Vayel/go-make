@@ -9,15 +9,13 @@ import (
 // methods
 type MasterService int
 var waitingSlaves []*Slave
-var slavefiledir string = "outputfiles/"
 
 // Do not care about the parameter `args`
-func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
+func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     for k, rule := range readyRules {
-		var requiredFiles RequiredFiles = make(RequiredFiles)
-		var err error
+		requiredFiles := make(RequiredFiles)
 		for _, dependency := range rule.Dependencies {
-			requiredFiles[dependency], err = ReadFile(slavefiledir + dependency)
+			requiredFiles[dependency], err = ReadFile(resultDir + dependency)
 			if err != nil {
 				return err
 			}
@@ -31,7 +29,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
 }
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
-	WriteFile(slavefiledir + result.Rule.Target, result.Bytes)
+	WriteFile(resultDir + result.Rule.Target, result.Output)
     executedRules[result.Rule.Target] = "TODO: generated file"
     updateParents(result.Rule.Target)
 

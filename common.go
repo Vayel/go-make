@@ -23,15 +23,11 @@ type Rule struct {
 type Task struct {
 	Rule Rule
 	RequiredFiles RequiredFiles
-	// Also pass the files created by previous commands
-	// TODO
 }
 
 type Result struct {
     Rule Rule
-	Bytes []byte
-    // The generated file
-    // TODO
+	Output []byte
 }
 
 type RequiredFiles map[string][]byte
@@ -46,6 +42,8 @@ type Slave struct {
 }
 
 func ReadFile(filename string) ([]byte, error) {
+	//TODO: Change this function so that we don't read the entire file in memory but slice by slice
+	//TODO: Change the code to send the file so that it is a loop on file slices
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err

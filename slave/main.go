@@ -8,11 +8,11 @@ import (
     "os/exec"
 )
 
-var filedir string = "outputfiles/"
+var dependencyDir string
 
 func writeFiles(requiredFiles RequiredFiles) error {
 	for filename, bytes := range requiredFiles {
-		err := WriteFile(filedir + filename, bytes)
+		err := WriteFile(dependencyDir + filename, bytes)
 		if(err != nil) {
 			return err
 		}
@@ -39,11 +39,17 @@ func help() {
 }
 
 func main() {
-	if len(os.Args) < 3 {
+	if len(os.Args) < 4 {
 		fmt.Println("Not enough arguments")
 		help()
 		os.Exit(1)
 	}
+
+	if stat, err := os.Stat(os.Args[3]); err != nil || !stat.IsDir() {
+		fmt.Println("Not a directory: " + os.Args[3])
+		os.Exit(1)
+	}
+	dependencyDir = os.Args[3]
 
 	addr := os.Args[1]
 	port := os.Args[2]
@@ -67,12 +73,12 @@ func main() {
         }
 
         work(task)
-		fileResult, err := ReadFile(filedir + task.Rule.Target)
+		fileResult, err := ReadFile(dependencyDir + task.Rule.Target)
 		if err != nil {
             fmt.Println(err)
 			return
 		}
-		result = Result{Rule: task.Rule, Bytes: fileResult}
+		result = Result{Rule: task.Rule, Output: fileResult}
         err = client.Call("MasterService.ReceiveResult", &result, &reply)
         if err != nil {
             fmt.Println(err)

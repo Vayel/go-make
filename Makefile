@@ -1,3 +1,8 @@
+target = all
+port = 10000
+output = outputfiles/
+masteraddr = localhost
+
 all: master slave
 
 .PHONY: master
@@ -16,11 +21,11 @@ slave:
 
 .PHONY: run_slave
 run_slave:
-	@./bin/slave localhost 10000
+	@./bin/slave $(masteraddr) $(port) $(output)
 
 .PHONY: run_master
 run_master:
-	@./bin/master makefiles/$(filter-out run_master, $(MAKECMDGOALS)) all 10000
+	@./bin/master makefiles/$(filter-out run_master, $(MAKECMDGOALS)) $(target) $(port) $(output)
 
 clean:
 	@rm -r bin

@@ -11,10 +11,11 @@ var rules Rules
 var rulesToParents RulesToParents
 var readyRules Rules // Use a map to avoid duplicates
 var executedRules ExecutedRules
+var resultDir string
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port")
+	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port result-dir")
 	fmt.Println("\nExamples:")
 	fmt.Println("\tmaster Makefile all 10000")
 	fmt.Println("\tmaster ../MyMakefile test.c 10000")
@@ -72,11 +73,17 @@ func printRules(rules *Rules) {
 }
 
 func main() {
-	if len(os.Args) != 4 {
+	if len(os.Args) != 5 {
 		fmt.Println("Invalid number of arguments")
 		help()
 		os.Exit(1)
 	}
+
+	if stat, err := os.Stat(os.Args[4]); err != nil || !stat.IsDir() {
+		fmt.Println("Not a directory: " + os.Args[4])
+		os.Exit(1)
+	}
+	resultDir = os.Args[4]
 
 	path := os.Args[1]
 	path, err := getAbsolutePath(path)
