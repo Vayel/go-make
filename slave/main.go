@@ -8,6 +8,7 @@ import (
     "os/exec"
 )
 
+var done chan bool
 var hasTask chan bool
 var task Task
 
@@ -44,10 +45,23 @@ func main() {
 	}
 
 	task = Task{}
-	port := "40000" // TODO: choose port ?
 	slave := Slave{Todo: "todo", Addr:"0.0.0.0:"+port} // TODO: get addr
 	var result Result
     var reply bool
+
+	// start RPC server for the master to contact us
+	// if no task available when calling GiveTask
+	done = make(chan bool, 1)
+	go Serve(port, done)
+	// TODO: handle errors
+
+	/*
+	if err != nil {
+		fmt.Println("Cannot start server:", err)
+		os.Exit(1)
+	}
+	*/
+
 
     for {
         err = client.Call("MasterService.GiveTask", &slave, &task)
@@ -57,20 +71,8 @@ func main() {
         }
 
         if len(task.Rule.Target) == 0 {
-		// IDEA : all the code in the infinite loop, with a variable set to
-		// false that goes to true when task received => signal to go back to
-		// the infinite loop
-
-			// if no task given by the master, start RPC server for the master to contact us
-			err = Serve(port)
-			if err != nil {
-				fmt.Println("Cannot start server:", err)
-				os.Exit(1)
-			}
-
-			<-hasTask // block until something is in the channel
-			// (acts like a listener to the variable)
-			//TODO: close server ?
+			<-hasTask
+			continue
         }
 
         work(task)
@@ -83,9 +85,4 @@ func main() {
 
 	    task = Task{}
     }
-
-
-
-
-
 }

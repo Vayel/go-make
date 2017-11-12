@@ -19,9 +19,12 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
         // TODO: send dependency files
         *reply = Task{Rule: *rule}
         delete(readyRules, k)
+		if _, exists := waitingSlaves[slave]; exists {
+			delete(waitingSlaves, slave)
+		}
 	    return nil
     }
-    waitingSlaves = append(waitingSlaves, slave)
+    waitingSlaves[slave] = true
 	return nil
 }
 
@@ -35,37 +38,20 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
     }
 
 	// contact waiting slaves if some work appeared
-
-	var toRemove []*Slave // temporary list of slaves to which we gave a task
-	// needed because we can't delete elements from a list while looping
-	for slave, _ := range waitingSlaves {
-		if len(readyRules) != 0 {
-			// get a random task from the ReadyRules list
-			var rule *Rule
-			for _, r := range readyRules {
-				rule = r
-				break
-			}
-
-			task := Task{Rule: *rule}
-
+	if len(readyRules) != 0 {
+		for slave, _ := range waitingSlaves {
 			slaveClient, err := rpc.Dial("tcp", (*slave).Addr)
 			if err != nil {
-				return err
+				delete(waitingSlaves, slave)
+				return nil
 			}
-			err = slaveClient.Call("SlaveService.ReceiveTask", &task, nil)
-			if err != nil {
-				return err
-			}
-			toRemove = append(toRemove, slave)
-		} else {
-			break
-		}
-	}
 
-	// delete slaves which have now a task
-	for _,slave := range toRemove {
-		delete(waitingSlaves, slave)
+			err = slaveClient.Call("SlaveService.WakeUp", nil, nil)
+			if err != nil {
+				delete(waitingSlaves, slave)
+				return nil
+			}
+		}
 	}
 	return nil
 }
