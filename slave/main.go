@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/rpc"
 	"os"
-    "os/exec"
-    "path"
+	"os/exec"
+	"path"
 )
 
 var dependencyDir string
@@ -26,15 +26,15 @@ func writeFiles(requiredFiles RequiredFiles) error {
 }
 
 func work(task Task) (err error) {
-    fmt.Println("Begin", task.Rule.Target)
+	fmt.Println("Begin", task.Rule.Target)
 	writeFiles(task.RequiredFiles)
-    for _, cmd := range task.Rule.Commands {
-        if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
-            return e
-        }
-    }
-    fmt.Println("End", task.Rule.Target, "\n")
-    return
+	for _, cmd := range task.Rule.Commands {
+		if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
+			return e
+		}
+	}
+	fmt.Println("End", task.Rule.Target, "\n")
+	return
 }
 
 func help() {
@@ -70,55 +70,55 @@ func main() {
 	}
 
 	task = Task{}
-	slave := Slave{Addr:slaveAddr+":"+slavePort}
+	slave := Slave{Addr: slaveAddr + ":" + slavePort}
 	var result Result
-    var end bool
+	var end bool
 
 	// start RPC server for the master to contact us
 	// if no task available when calling GiveTask
 	// (it's more efficient than starting it and closing it
 	// dynamically when needed)
 	done = make(chan bool, 1)
-    inbound, err := createServer(slavePort)
+	inbound, err := createServer(slavePort)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)
 	}
-	fmt.Println("RPC server (slave) running on ", slaveAddr + ":" + slavePort)
+	fmt.Println("RPC server (slave) running on ", slaveAddr+":"+slavePort)
 	go Serve(inbound)
 
-    for {
-        err = client.Call("MasterService.GiveTask", &slave, &task)
-        if err != nil {
-            fmt.Println(err)
-            return
-        }
+	for {
+		err = client.Call("MasterService.GiveTask", &slave, &task)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-        if len(task.Rule.Target) == 0 {
-            fmt.Println("Wait for task\n")
+		if len(task.Rule.Target) == 0 {
+			fmt.Println("Wait for task\n")
 			running := <-hasTask
-            if !running {
-                break
-            }
-            continue
-        }
+			if !running {
+				break
+			}
+			continue
+		}
 
-        work(task)
+		work(task)
 		fileResult, err := ReadFile(dependencyDir + task.Rule.Target)
 		if err != nil {
-            fmt.Println(err)
+			fmt.Println(err)
 			return
 		}
 		result = Result{Rule: task.Rule, Output: fileResult}
-        err = client.Call("MasterService.ReceiveResult", &result, &end)
-        if err != nil {
-            fmt.Println(err)
-            return
-        }
-        if end {
-            break
-        }
+		err = client.Call("MasterService.ReceiveResult", &result, &end)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if end {
+			break
+		}
 
-	    task = Task{}
-    }
+		task = Task{}
+	}
 }

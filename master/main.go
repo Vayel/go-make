@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"net/rpc"
+	"os"
 	"path"
 )
 
@@ -49,29 +49,29 @@ func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
 
 // When a dependency has been executed, some of its parents may become ready
 func updateParents(child string) {
-    for _, parent := range rulesToParents[child] {
-        if isReady(rules[parent]) {
-		    readyRules[parent] = rules[parent]
-        }
-    }
+	for _, parent := range rulesToParents[child] {
+		if isReady(rules[parent]) {
+			readyRules[parent] = rules[parent]
+		}
+	}
 }
 
 // A rule is ready if it has not been executed and if all its dependencies have
 // been executed
 func isReady(rule *Rule) bool {
-    if _, present := executedRules[rule.Target]; present {
-        return false
-    }
-    for _, dep := range rule.Dependencies {
-        if _, present := executedRules[dep]; !present {
-            return false
-        }
-    }
-    return true
+	if _, present := executedRules[rule.Target]; present {
+		return false
+	}
+	for _, dep := range rule.Dependencies {
+		if _, present := executedRules[dep]; !present {
+			return false
+		}
+	}
+	return true
 }
 
 func terminate() {
-    fmt.Println(firstTarget, "rule has been computed!")
+	fmt.Println(firstTarget, "rule has been computed!")
 
 	// Tell waiting slaves to shutdown
 	for _, slave := range waitingSlaves {
@@ -79,8 +79,8 @@ func terminate() {
 		slaveClient.Call("SlaveService.ShutDown", true, nil)
 	}
 
-    // Kill the RPC server
-    done <- true
+	// Kill the RPC server
+	done <- true
 }
 
 func getAbsolutePath(relPath string) (string, error) {
@@ -129,10 +129,10 @@ func main() {
 
 	firstTarget = os.Args[2]
 
-    if _, present := rules[firstTarget]; !present {
-        fmt.Printf("Invalid target '%s'\n", firstTarget)
-        os.Exit(1)
-    }
+	if _, present := rules[firstTarget]; !present {
+		fmt.Printf("Invalid target '%s'\n", firstTarget)
+		os.Exit(1)
+	}
 
 	executedRules = make(ExecutedRules)
 	readyRules = make(Rules)
@@ -140,7 +140,7 @@ func main() {
 	linkRulesToParents(&rules, firstTarget, &rulesToParents)
 
 	port := os.Args[3]
-    done = make(chan bool, 1)
+	done = make(chan bool, 1)
 	err = Serve(port)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)

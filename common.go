@@ -21,12 +21,12 @@ type Rule struct {
 }
 
 type Task struct {
-	Rule Rule
+	Rule          Rule
 	RequiredFiles RequiredFiles
 }
 
 type Result struct {
-    Rule Rule
+	Rule   Rule
 	Output []byte
 }
 
@@ -56,4 +56,3 @@ func WriteFile(filename string, bytes []byte) error {
 	err := ioutil.WriteFile(filename, bytes, fileMode)
 	return err
 }
-

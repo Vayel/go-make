@@ -8,7 +8,6 @@ import (
 
 type SlaveService int
 
-
 // master sends it to a waiting slave to tell him tasks are available
 func (m *SlaveService) WakeUp(p1 bool, p2 *bool) error {
 	// parameters are useless, but RPC needs them
@@ -17,14 +16,14 @@ func (m *SlaveService) WakeUp(p1 bool, p2 *bool) error {
 }
 
 // master sends it to a waiting slave to tell him to shut down
-func (m*SlaveService) ShutDown(p1 bool, p2 *bool) error {
+func (m *SlaveService) ShutDown(p1 bool, p2 *bool) error {
 	hasTask <- false
 	done <- true
 	return nil
 }
 
 func createServer(port string) (*net.TCPListener, error) {
-    addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
+	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +32,7 @@ func createServer(port string) (*net.TCPListener, error) {
 	if err != nil {
 		return nil, err
 	}
-    return inbound, nil
+	return inbound, nil
 }
 
 // create a slave server for the master to send a task
