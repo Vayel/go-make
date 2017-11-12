@@ -131,7 +131,7 @@ func main() {
 
 	port := os.Args[3]
     done = make(chan bool, 1)
-	err = Serve(port, done)
+	err = Serve(port)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)

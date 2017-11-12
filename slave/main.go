@@ -31,21 +31,23 @@ func help() {
 }
 
 func main() {
-	if len(os.Args) < 3 {
+	if len(os.Args) < 4 {
 		fmt.Println("Not enough arguments")
 		help()
 		os.Exit(1)
 	}
 
-	addr := os.Args[1]
-	port := os.Args[2]
-	client, err := rpc.Dial("tcp", addr+":"+port)
+	masterAddr := os.Args[1]
+	masterPort := os.Args[2]
+	slaveAddr := os.Args[3]
+	slavePort := os.Args[4]
+	client, err := rpc.Dial("tcp", masterAddr+":"+masterPort)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	task = Task{}
-	slave := Slave{Addr:"0.0.0.0:"+port} // TODO: get addr
+	slave := Slave{Addr:slaveAddr+":"+slavePort}
 	var result Result
     var reply bool
 
@@ -54,7 +56,7 @@ func main() {
 	// (it's more efficient than starting it and closing it
 	// dynamically when needed)
 	done = make(chan bool, 1)
-	go Serve(port, done)
+	go Serve(slavePort)
 	// TODO: handle errors
 
 	/*

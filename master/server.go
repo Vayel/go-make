@@ -43,7 +43,7 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 	return nil
 }
 
-func Serve(port string, done chan bool) error {
+func Serve(port string) error {
     addr := "0.0.0.0:" + port
 	addy, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {

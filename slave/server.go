@@ -22,9 +22,8 @@ func (m*SlaveService) ShutDown(p1 *bool, p2 *bool) {
 
 
 // create a slave server for the master to send a task
-// TODO: close it ?
-func Serve(port string, done chan bool) error {
-	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0"+port)
+func Serve(port string) error {
+	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
 	if err != nil {
 		return err
 	}
