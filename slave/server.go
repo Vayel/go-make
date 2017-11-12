@@ -9,10 +9,15 @@ import (
 type SlaveService int
 
 
-// master sends it to a waiting slave to give a task
+// master sends it to a waiting slave to tell him tasks are available
 func (m *SlaveService) WakeUp(p1 *bool, p2 *bool) {
 	// parameters are useless, but RPC needs them
 	hasTask <- true
+}
+
+// master sends it to a waiting slave to tell him to shut down
+func (m*SlaveService) ShutDown(p1 *bool, p2 *bool) {
+	done <- true
 }
 
 

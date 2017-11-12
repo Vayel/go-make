@@ -43,13 +43,11 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 			slaveClient, err := rpc.Dial("tcp", (*slave).Addr)
 			if err != nil {
 				delete(waitingSlaves, slave)
-				return nil
 			}
 
 			err = slaveClient.Call("SlaveService.WakeUp", nil, nil)
 			if err != nil {
 				delete(waitingSlaves, slave)
-				return nil
 			}
 		}
 	}

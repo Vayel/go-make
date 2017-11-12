@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"net/rpc"
 	"path"
 	"strings"
 )
@@ -58,10 +59,15 @@ func isReady(rule *Rule) bool {
 
 func terminate() {
     fmt.Println(firstTarget, "rule has been computed!")
+
+	// Tell waiting slaves to shutdown
+	for slave, _ := range waitingSlaves {
+		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
+		slaveClient.Call("SlaveService.ShutDown", nil, nil)
+	}
+
     // Kill the RPC server
     done <- true
-    // TODO:
-    //    * kill waiting slaves
 }
 
 func getAbsolutePath(relPath string) (string, error) {
