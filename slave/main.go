@@ -27,6 +27,7 @@ func writeFiles(requiredFiles RequiredFiles) error {
 }
 
 func work(task Task) (err error) {
+    fmt.Println("Executing", task.Rule.Target)
 	writeFiles(task.RequiredFiles)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
