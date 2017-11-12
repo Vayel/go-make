@@ -35,7 +35,7 @@ type RequiredFiles map[string][]byte
 type RulesToParents map[string][]string
 
 // TODO: the value type is not a string but a file
-type ExecutedRules map[string]string
+type ExecutedRules map[string]bool
 
 type Slave struct {
 	Addr string

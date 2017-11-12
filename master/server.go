@@ -31,7 +31,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 	WriteFile(resultDir + result.Rule.Target, result.Output)
-    executedRules[result.Rule.Target] = "TODO: generated file"
+    executedRules[result.Rule.Target] = true
     updateParents(result.Rule.Target)
 
     if result.Rule.Target == firstTarget {

@@ -20,8 +20,8 @@ func help() {
 	fmt.Println("Help:")
 	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port result-dir")
 	fmt.Println("\nExamples:")
-	fmt.Println("\tmaster Makefile all 10000")
-	fmt.Println("\tmaster ../MyMakefile test.c 10000")
+	fmt.Println("\tmaster Makefile all 10000 outputfiles/")
+	fmt.Println("\tmaster ../MyMakefile test.c 10000 dir/outputfiles/")
 }
 
 func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
