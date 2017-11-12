@@ -51,6 +51,8 @@ func main() {
 
 	// start RPC server for the master to contact us
 	// if no task available when calling GiveTask
+	// (it's more efficient than starting it and closing it
+	// dynamically when needed)
 	done = make(chan bool, 1)
 	go Serve(port, done)
 	// TODO: handle errors
