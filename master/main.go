@@ -11,6 +11,8 @@ var rules Rules
 var rulesToParents RulesToParents
 var readyRules Rules // Use a map to avoid duplicates
 var executedRules ExecutedRules
+var firstTarget string
+var done chan bool
 
 func help() {
 	fmt.Println("Help:")
@@ -54,6 +56,14 @@ func isReady(rule *Rule) bool {
     return true
 }
 
+func terminate() {
+    fmt.Println(firstTarget, "rule has been computed!")
+    // Kill the RPC server
+    done <- true
+    // TODO:
+    //    * kill waiting slaves
+}
+
 func getAbsolutePath(relPath string) (string, error) {
 	wdir, err := os.Getwd()
 	if err != nil {
@@ -91,6 +101,7 @@ func main() {
 		f.Close()
 		os.Exit(1)
 	}
+	defer f.Close()
 
 	rules = make(Rules)
 	err = Parse(f, &rules)
@@ -99,22 +110,22 @@ func main() {
 		f.Close()
 		os.Exit(1)
 	}
-	f.Close()
 
-	target := os.Args[2]
+	firstTarget = os.Args[2]
 
-    if _, present := rules[target]; !present {
-        fmt.Printf("Invalid target '%s'\n", target)
+    if _, present := rules[firstTarget]; !present {
+        fmt.Printf("Invalid target '%s'\n", firstTarget)
         os.Exit(1)
     }
 
 	executedRules = make(ExecutedRules)
 	readyRules = make(Rules)
 	rulesToParents = make(RulesToParents)
-	linkRulesToParents(&rules, target, &rulesToParents)
+	linkRulesToParents(&rules, firstTarget, &rulesToParents)
 
 	port := os.Args[3]
-	err = Serve(port)
+    done = make(chan bool, 1)
+	err = Serve(port, done)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)
