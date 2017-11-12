@@ -45,7 +45,7 @@ func main() {
 	}
 
 	task = Task{}
-	slave := Slave{Todo: "todo", Addr:"0.0.0.0:"+port} // TODO: get addr
+	slave := Slave{Addr:"0.0.0.0:"+port} // TODO: get addr
 	var result Result
     var reply bool
 

@@ -61,7 +61,7 @@ func terminate() {
     fmt.Println(firstTarget, "rule has been computed!")
 
 	// Tell waiting slaves to shutdown
-	for slave, _ := range waitingSlaves {
+	for _,slave := range waitingSlaves {
 		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
 		slaveClient.Call("SlaveService.ShutDown", nil, nil)
 	}

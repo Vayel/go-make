@@ -10,21 +10,16 @@ import (
 // methods
 type MasterService int
 
-// use map instead of list as it's more efficient to delete elements from map
-var waitingSlaves map[*Slave]bool
+var waitingSlaves []*Slave
 
-// Do not care about the parameter `args`
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
     for k, rule := range readyRules {
         // TODO: send dependency files
         *reply = Task{Rule: *rule}
         delete(readyRules, k)
-		if _, exists := waitingSlaves[slave]; exists {
-			delete(waitingSlaves, slave)
-		}
 	    return nil
     }
-    waitingSlaves[slave] = true
+	waitingSlaves = append(waitingSlaves, slave)
 	return nil
 }
 
@@ -39,17 +34,11 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 
 	// contact waiting slaves if some work appeared
 	if len(readyRules) != 0 {
-		for slave, _ := range waitingSlaves {
-			slaveClient, err := rpc.Dial("tcp", (*slave).Addr)
-			if err != nil {
-				delete(waitingSlaves, slave)
-			}
-
-			err = slaveClient.Call("SlaveService.WakeUp", nil, nil)
-			if err != nil {
-				delete(waitingSlaves, slave)
-			}
+		for _, slave := range waitingSlaves {
+			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
+			slaveClient.Call("SlaveService.WakeUp", nil, nil)
 		}
+		waitingSlaves = []*Slave{};
 	}
 	return nil
 }
