@@ -9,9 +9,9 @@ import (
 // The exposed type does not matter, the client only looks at its exported
 // methods
 type MasterService int
+
 var waitingSlaves []*Slave
 
-// Do not care about the parameter `args`
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     for k, rule := range readyRules {
 		requiredFiles := make(RequiredFiles)
@@ -25,7 +25,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
         delete(readyRules, k)
 	    return nil
     }
-    waitingSlaves = append(waitingSlaves, slave)
+	waitingSlaves = append(waitingSlaves, slave)
 	return nil
 }
 
@@ -39,12 +39,18 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
         return nil
     }
 
-    // TODO: contact waiting slaves if some work appeared
-
+	// contact waiting slaves if some work appeared
+	if len(readyRules) != 0 {
+		for _, slave := range waitingSlaves {
+			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
+			slaveClient.Call("SlaveService.WakeUp", nil, nil)
+		}
+		waitingSlaves = make([]*Slave, 0);
+	}
 	return nil
 }
 
-func Serve(port string, done chan bool) error {
+func Serve(port string) error {
     addr := "0.0.0.0:" + port
 	addy, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {

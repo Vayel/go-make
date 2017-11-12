@@ -38,7 +38,7 @@ type RulesToParents map[string][]string
 type ExecutedRules map[string]bool
 
 type Slave struct {
-    Todo string
+	Addr string
 }
 
 func ReadFile(filename string) ([]byte, error) {
