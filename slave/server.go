@@ -41,5 +41,7 @@ func Serve(port string) error {
 	fmt.Println("RPC server (slave) running on ", addy)
 	<-done
 	fmt.Println("RPC server (slave) turned off")
+	serverClosed = true
+	hasTask <- false
 	return nil
 }

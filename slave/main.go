@@ -11,6 +11,7 @@ import (
 var dependencyDir string
 
 var done chan bool
+var serverClosed bool
 var hasTask chan bool
 var task Task
 
@@ -26,7 +27,6 @@ func writeFiles(requiredFiles RequiredFiles) error {
 
 func work(task Task) (err error) {
 	writeFiles(task.RequiredFiles)
-    fmt.Println("Working on ", task.Rule.Target)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
             return e
@@ -43,6 +43,8 @@ func help() {
 }
 
 func main() {
+	hasTask = make(chan bool, 1)
+
 	if len(os.Args) < 6 {
 		fmt.Println("Not enough arguments")
 		help()
@@ -75,6 +77,7 @@ func main() {
 	// (it's more efficient than starting it and closing it
 	// dynamically when needed)
 	done = make(chan bool, 1)
+	serverClosed = false
 	go Serve(slavePort)
 	// TODO: handle errors
 
@@ -86,7 +89,7 @@ func main() {
 	*/
 
 
-    for {
+    for !serverClosed {
         err = client.Call("MasterService.GiveTask", &slave, &task)
         if err != nil {
             fmt.Println(err)

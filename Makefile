@@ -21,9 +21,13 @@ slave:
 	go build -o bin/slave slave/*.go
 	@rm slave/common.go
 
-.PHONY: run_slave
-run_slave:
-	@./bin/slave $(masteraddr) $(masterport) $(slaveaddr) $(slaveport) $(output)
+.PHONY: run_slave1
+run_slave1:
+	@./bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40000 $(output)
+
+.PHONY: run_slave2
+run_slave2:
+	@./bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40001 $(output)
 
 .PHONY: run_master
 run_master:

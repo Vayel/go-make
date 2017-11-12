@@ -1,0 +1,8 @@
+
+all: one
+	echo "all" > outputfiles/all
+
+one:
+	echo "one start" > outputfiles/one
+	sleep 3
+	echo "one end" >> outputfiles/one
