@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-// The keys are the targets
-// We store pointers to rules and not rules directly to be able to update the struct
-// See https://stackoverflow.com/a/32751792
-type Rules map[string]*Rule
-
 func getLineType(line string) int {
 	if strings.HasPrefix(line, CommandPrefix) {
 		return CommandType

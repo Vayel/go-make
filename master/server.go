@@ -4,6 +4,7 @@ import (
     "fmt"
 	"net"
 	"net/rpc"
+    "path"
 )
 
 // The exposed type does not matter, the client only looks at its exported
@@ -12,25 +13,27 @@ type MasterService int
 
 var waitingSlaves []*Slave
 
+// The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     for k, rule := range readyRules {
 		requiredFiles := make(RequiredFiles)
 		for _, dependency := range rule.Dependencies {
-			requiredFiles[dependency], err = ReadFile(resultDir + dependency)
+			requiredFiles[dependency], err = ReadFile(path.Join(resultDir, dependency))
 			if err != nil {
-				return err
+				return
 			}
 		}
-		*reply = Task{Rule: *rule, RequiredFiles:requiredFiles}
+		*reply = Task{Rule: *rule, RequiredFiles: requiredFiles}
         delete(readyRules, k)
-	    return nil
+	    return
     }
 	waitingSlaves = append(waitingSlaves, slave)
-	return nil
+	return
 }
 
+// The method called by slave when they terminate a task
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
-	WriteFile(resultDir + result.Rule.Target, result.Output)
+	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
     executedRules[result.Rule.Target] = true
     updateParents(result.Rule.Target)
 
@@ -39,13 +42,13 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
         return nil
     }
 
-	// contact waiting slaves if some work appeared
+	// If tasks appeared, wake up all slaves for them to ask for work
 	if len(readyRules) != 0 {
 		for _, slave := range waitingSlaves {
 			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
 			slaveClient.Call("SlaveService.WakeUp", true, nil)
 		}
-		waitingSlaves = make([]*Slave, 0);
+		waitingSlaves = make([]*Slave, 0)
 	}
 	return nil
 }

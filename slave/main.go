@@ -6,6 +6,7 @@ import (
 	"net/rpc"
 	"os"
     "os/exec"
+    "path"
 )
 
 var dependencyDir string
@@ -17,8 +18,8 @@ var task Task
 
 func writeFiles(requiredFiles RequiredFiles) error {
 	for filename, bytes := range requiredFiles {
-		err := WriteFile(dependencyDir + filename, bytes)
-		if(err != nil) {
+		err := WriteFile(path.Join(dependencyDir, filename), bytes)
+		if err != nil {
 			return err
 		}
 	}
@@ -39,7 +40,7 @@ func help() {
 	fmt.Println("Help:")
 	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port dependency-dir")
 	fmt.Println("\nExample:")
-	fmt.Println("\tslave localhost 10000 129.6.12.81 40000 ~/rpc-go/")
+	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 ~/rpc-go/")
 }
 
 func main() {

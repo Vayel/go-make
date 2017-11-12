@@ -18,6 +18,7 @@ func (m *SlaveService) WakeUp(p1 bool, p2 *bool) error {
 
 // master sends it to a waiting slave to tell him to shut down
 func (m*SlaveService) ShutDown(p1 bool, p2 *bool) error {
+	serverClosed = true
 	done <- true
 	return nil
 }
@@ -41,7 +42,6 @@ func Serve(port string) error {
 	fmt.Println("RPC server (slave) running on ", addy)
 	<-done
 	fmt.Println("RPC server (slave) turned off")
-	serverClosed = true
 	hasTask <- false
 	return nil
 }

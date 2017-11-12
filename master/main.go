@@ -5,8 +5,15 @@ import (
 	"os"
 	"net/rpc"
 	"path"
-	"strings"
 )
+
+// The keys are the targets
+// We store pointers to rules and not rules directly to be able to update the struct
+// See https://stackoverflow.com/a/32751792
+type Rules map[string]*Rule
+
+// Use a map to efficiently determine if a rule has been executed
+type ExecutedRules map[string]bool
 
 var rules Rules
 var rulesToParents RulesToParents
@@ -24,6 +31,8 @@ func help() {
 	fmt.Println("\tmaster ../MyMakefile test.c 10000 dir/outputfiles/")
 }
 
+// With this function, we can easily access the parents of a given rule, that is
+// the rules depending on that rule
 func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
 	rule := (*rules)[parent]
 	for _, dep := range rule.Dependencies {
@@ -38,6 +47,7 @@ func linkRulesToParents(rules *Rules, parent string, mapping *RulesToParents) {
 	}
 }
 
+// When a dependency has been executed, some of its parents may become ready
 func updateParents(child string) {
     for _, parent := range rulesToParents[child] {
         if isReady(rules[parent]) {
@@ -46,6 +56,8 @@ func updateParents(child string) {
     }
 }
 
+// A rule is ready if it has not been executed and if all its dependencies have
+// been executed
 func isReady(rule *Rule) bool {
     if _, present := executedRules[rule.Target]; present {
         return false
@@ -62,7 +74,7 @@ func terminate() {
     fmt.Println(firstTarget, "rule has been computed!")
 
 	// Tell waiting slaves to shutdown
-	for _,slave := range waitingSlaves {
+	for _, slave := range waitingSlaves {
 		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
 		slaveClient.Call("SlaveService.ShutDown", true, nil)
 	}
@@ -79,15 +91,6 @@ func getAbsolutePath(relPath string) (string, error) {
 	return path.Join(wdir, relPath), nil
 }
 
-func printRules(rules *Rules) {
-	for target, rule := range *rules {
-		fmt.Print(target, ": ", strings.Join(rule.Dependencies, " "), "\n")
-		for _, cmd := range rule.Commands {
-			fmt.Println(CommandPrefix, cmd)
-		}
-	}
-}
-
 func main() {
 	if len(os.Args) != 5 {
 		fmt.Println("Invalid number of arguments")
@@ -95,11 +98,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if stat, err := os.Stat(os.Args[4]); err != nil || !stat.IsDir() {
-		fmt.Println("Not a directory: " + os.Args[4])
+	resultDir = os.Args[4]
+	if stat, err := os.Stat(resultDir); err != nil || !stat.IsDir() {
+		fmt.Println("Result directory does not exist: " + resultDir)
 		os.Exit(1)
 	}
-	resultDir = os.Args[4]
 
 	path := os.Args[1]
 	path, err := getAbsolutePath(path)
