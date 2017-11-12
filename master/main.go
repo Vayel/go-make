@@ -64,7 +64,7 @@ func terminate() {
 	// Tell waiting slaves to shutdown
 	for _,slave := range waitingSlaves {
 		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
-		slaveClient.Call("SlaveService.ShutDown", nil, nil)
+		slaveClient.Call("SlaveService.ShutDown", true, nil)
 	}
 
     // Kill the RPC server

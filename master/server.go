@@ -43,7 +43,7 @@ func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
 	if len(readyRules) != 0 {
 		for _, slave := range waitingSlaves {
 			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
-			slaveClient.Call("SlaveService.WakeUp", nil, nil)
+			slaveClient.Call("SlaveService.WakeUp", true, nil)
 		}
 		waitingSlaves = make([]*Slave, 0);
 	}

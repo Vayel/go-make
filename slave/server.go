@@ -10,14 +10,16 @@ type SlaveService int
 
 
 // master sends it to a waiting slave to tell him tasks are available
-func (m *SlaveService) WakeUp(p1 *bool, p2 *bool) {
+func (m *SlaveService) WakeUp(p1 bool, p2 *bool) error {
 	// parameters are useless, but RPC needs them
 	hasTask <- true
+	return nil
 }
 
 // master sends it to a waiting slave to tell him to shut down
-func (m*SlaveService) ShutDown(p1 *bool, p2 *bool) {
+func (m*SlaveService) ShutDown(p1 bool, p2 *bool) error {
 	done <- true
+	return nil
 }
 
 
