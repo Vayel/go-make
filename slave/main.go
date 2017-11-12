@@ -79,16 +79,13 @@ func main() {
 	// (it's more efficient than starting it and closing it
 	// dynamically when needed)
 	done = make(chan bool, 1)
-	go Serve(slavePort)
-	// TODO: handle errors
-
-	/*
+    inbound, err := createServer(slavePort)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)
 	}
-	*/
-
+	fmt.Println("RPC server (slave) running on ", slaveAddr + ":" + slavePort)
+	go Serve(inbound)
 
     for {
         err = client.Call("MasterService.GiveTask", &slave, &task)
@@ -98,7 +95,7 @@ func main() {
         }
 
         if len(task.Rule.Target) == 0 {
-            fmt.Println("wait for task")
+            fmt.Println("Wait for task\n")
 			running := <-hasTask
             if !running {
                 break

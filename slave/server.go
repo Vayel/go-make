@@ -23,24 +23,24 @@ func (m*SlaveService) ShutDown(p1 bool, p2 *bool) error {
 	return nil
 }
 
-
-// create a slave server for the master to send a task
-func Serve(port string) error {
-	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
+func createServer(port string) (*net.TCPListener, error) {
+    addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+port)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	inbound, err := net.ListenTCP("tcp", addy)
 	if err != nil {
-		return err
+		return nil, err
 	}
+    return inbound, nil
+}
 
+// create a slave server for the master to send a task
+func Serve(inbound *net.TCPListener) {
 	service := new(SlaveService)
 	rpc.Register(service)
 	go rpc.Accept(inbound)
-	fmt.Println("RPC server (slave) running on ", addy)
 	<-done
 	fmt.Println("RPC server (slave) turned off")
-	return nil
 }
