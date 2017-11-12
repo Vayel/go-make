@@ -12,10 +12,16 @@ type MasterService int
 var waitingSlaves []*Slave
 
 // Do not care about the parameter `args`
-func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
+func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     for k, rule := range readyRules {
-        // TODO: send dependency files
-        *reply = Task{Rule: *rule}
+		requiredFiles := make(RequiredFiles)
+		for _, dependency := range rule.Dependencies {
+			requiredFiles[dependency], err = ReadFile(resultDir + dependency)
+			if err != nil {
+				return err
+			}
+		}
+		*reply = Task{Rule: *rule, RequiredFiles:requiredFiles}
         delete(readyRules, k)
 	    return nil
     }
@@ -24,8 +30,8 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) error {
 }
 
 func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
-    // TODO: save generated file
-    executedRules[result.Rule.Target] = "generated file"
+	WriteFile(resultDir + result.Rule.Target, result.Output)
+    executedRules[result.Rule.Target] = "TODO: generated file"
     updateParents(result.Rule.Target)
 
     if result.Rule.Target == firstTarget {

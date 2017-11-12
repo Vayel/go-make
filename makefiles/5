@@ -1,18 +1,18 @@
 
 all: one three
-	echo "all"
+	echo "all" > outputfiles/all
 
 one:
-	echo "one"
+	echo "one" > outputfiles/one
 
 three: four five
-	echo "three"
+	echo "three" > outputfiles/three
 
 four: two
-	echo "four"
+	echo "four" > outputfiles/four
 
 two: five
-	echo "two"
+	echo "two" > outputfiles/two
 
 five:
-	echo "five"
+	echo "five" > outputfiles/five

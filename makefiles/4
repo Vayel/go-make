@@ -1,18 +1,18 @@
 
 all: one
-	echo "all"
+	echo "all" > outputfiles/all
 
 one: two
-	echo "one"
+	echo "one" > outputfiles/one
 
 two: three
-	echo "two"
+	echo "two" > outputfiles/two
 
 fake: two
-	echo "ERROR"
+	echo "ERROR" > outputfiles/fake
 
 faketwo: all
-	echo "ERROR"
+	echo "ERROR" > outputfiles/faketwo
 
 three:
-	echo "three"
+	echo "three" > outputfiles/three

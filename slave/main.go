@@ -8,7 +8,20 @@ import (
     "os/exec"
 )
 
+var dependencyDir string
+
+func writeFiles(requiredFiles RequiredFiles) error {
+	for filename, bytes := range requiredFiles {
+		err := WriteFile(dependencyDir + filename, bytes)
+		if(err != nil) {
+			return err
+		}
+	}
+	return nil
+}
+
 func work(task Task) (err error) {
+	writeFiles(task.RequiredFiles)
     fmt.Println("Working on ", task.Rule.Target)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
@@ -26,11 +39,17 @@ func help() {
 }
 
 func main() {
-	if len(os.Args) < 3 {
+	if len(os.Args) < 4 {
 		fmt.Println("Not enough arguments")
 		help()
 		os.Exit(1)
 	}
+
+	if stat, err := os.Stat(os.Args[3]); err != nil || !stat.IsDir() {
+		fmt.Println("Not a directory: " + os.Args[3])
+		os.Exit(1)
+	}
+	dependencyDir = os.Args[3]
 
 	addr := os.Args[1]
 	port := os.Args[2]
@@ -54,7 +73,12 @@ func main() {
         }
 
         work(task)
-        result = Result{Rule: task.Rule}
+		fileResult, err := ReadFile(dependencyDir + task.Rule.Target)
+		if err != nil {
+            fmt.Println(err)
+			return
+		}
+		result = Result{Rule: task.Rule, Output: fileResult}
         err = client.Call("MasterService.ReceiveResult", &result, &reply)
         if err != nil {
             fmt.Println(err)
@@ -63,6 +87,4 @@ func main() {
 
 	    task = Task{}
     }
-
-    // TODO: start RPC server for the master to contact us
 }

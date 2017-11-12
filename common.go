@@ -1,5 +1,11 @@
 package main
 
+import (
+	"io/ioutil"
+	"os"
+)
+
+const fileMode = 0644
 const CommandPrefix = "\t"
 const TargetSuffix = ":"
 const (
@@ -16,15 +22,15 @@ type Rule struct {
 
 type Task struct {
 	Rule Rule
-	// Also pass the files created by previous commands
-	// TODO
+	RequiredFiles RequiredFiles
 }
 
 type Result struct {
     Rule Rule
-    // The generated file
-    // TODO
+	Output []byte
 }
+
+type RequiredFiles map[string][]byte
 
 type RulesToParents map[string][]string
 
@@ -34,3 +40,23 @@ type ExecutedRules map[string]string
 type Slave struct {
     Todo string
 }
+
+func ReadFile(filename string) ([]byte, error) {
+	//TODO: Change this function so that we don't read the entire file in memory but slice by slice
+	//TODO: Change the code to send the file so that it is a loop on file slices
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	filebytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	return filebytes, nil
+}
+
+func WriteFile(filename string, bytes []byte) error {
+	err := ioutil.WriteFile(filename, bytes, fileMode)
+	return err
+}
+
