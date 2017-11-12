@@ -38,4 +38,4 @@ target: dep1 dep2 dep3
 	instruction2
 ```
 
-And all the dependencies must create a file of the same name.
+And all the rules must create a file of the same name.
