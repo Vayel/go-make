@@ -32,12 +32,14 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 }
 
 // The method called by slave when they terminate a task
-func (m *MasterService) ReceiveResult(result *Result, reply *bool) error {
+func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
+    *end = false
 	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
     executedRules[result.Rule.Target] = true
     updateParents(result.Rule.Target)
 
     if result.Rule.Target == firstTarget {
+        *end = true
         terminate()
         return nil
     }

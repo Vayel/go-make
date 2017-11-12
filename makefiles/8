@@ -2,29 +2,29 @@ all: a1 a2 b
 	date > outputfiles/all
 
 a1: b1
-	sleep 10
+	sleep 5
 	date > outputfiles/a1
 
 b1: c1
-	sleep 10
+	sleep 5
 	date > outputfiles/b1
 
 c1: d
-	sleep 10
+	sleep 5
 	date > outputfiles/c1
     
 a2: b2
-	sleep 10
+	sleep 5
 	date > outputfiles/a2
 
 b2: d
-	sleep 10
+	sleep 5
 	date > outputfiles/b2
 
 b:
-	sleep 10
+	sleep 5
 	date > outputfiles/b
 
 d:
-	sleep 10
+	sleep 5
 	date > outputfiles/d

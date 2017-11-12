@@ -12,7 +12,6 @@ import (
 var dependencyDir string
 
 var done chan bool
-var serverClosed bool
 var hasTask chan bool
 var task Task
 
@@ -27,13 +26,14 @@ func writeFiles(requiredFiles RequiredFiles) error {
 }
 
 func work(task Task) (err error) {
-    fmt.Println("Executing", task.Rule.Target)
+    fmt.Println("Begin", task.Rule.Target)
 	writeFiles(task.RequiredFiles)
     for _, cmd := range task.Rule.Commands {
         if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
             return e
         }
     }
+    fmt.Println("End", task.Rule.Target, "\n")
     return
 }
 
@@ -72,14 +72,13 @@ func main() {
 	task = Task{}
 	slave := Slave{Addr:slaveAddr+":"+slavePort}
 	var result Result
-    var reply bool
+    var end bool
 
 	// start RPC server for the master to contact us
 	// if no task available when calling GiveTask
 	// (it's more efficient than starting it and closing it
 	// dynamically when needed)
 	done = make(chan bool, 1)
-	serverClosed = false
 	go Serve(slavePort)
 	// TODO: handle errors
 
@@ -91,7 +90,7 @@ func main() {
 	*/
 
 
-    for !serverClosed {
+    for {
         err = client.Call("MasterService.GiveTask", &slave, &task)
         if err != nil {
             fmt.Println(err)
@@ -99,8 +98,12 @@ func main() {
         }
 
         if len(task.Rule.Target) == 0 {
-			<-hasTask
-			continue
+            fmt.Println("wait for task")
+			running := <-hasTask
+            if !running {
+                break
+            }
+            continue
         }
 
         work(task)
@@ -110,10 +113,13 @@ func main() {
 			return
 		}
 		result = Result{Rule: task.Rule, Output: fileResult}
-        err = client.Call("MasterService.ReceiveResult", &result, &reply)
+        err = client.Call("MasterService.ReceiveResult", &result, &end)
         if err != nil {
             fmt.Println(err)
             return
+        }
+        if end {
+            break
         }
 
 	    task = Task{}
