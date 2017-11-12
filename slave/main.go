@@ -10,6 +10,10 @@ import (
 
 var dependencyDir string
 
+var done chan bool
+var hasTask chan bool
+var task Task
+
 func writeFiles(requiredFiles RequiredFiles) error {
 	for filename, bytes := range requiredFiles {
 		err := WriteFile(dependencyDir + filename, bytes)
@@ -39,37 +43,59 @@ func help() {
 }
 
 func main() {
-	if len(os.Args) < 4 {
+	if len(os.Args) < 6 {
 		fmt.Println("Not enough arguments")
 		help()
 		os.Exit(1)
 	}
 
-	if stat, err := os.Stat(os.Args[3]); err != nil || !stat.IsDir() {
-		fmt.Println("Not a directory: " + os.Args[3])
+	masterAddr := os.Args[1]
+	masterPort := os.Args[2]
+	slaveAddr := os.Args[3]
+	slavePort := os.Args[4]
+	dependencyDir = os.Args[5]
+
+	if stat, err := os.Stat(dependencyDir); err != nil || !stat.IsDir() {
+		fmt.Println("Not a directory: " + dependencyDir)
 		os.Exit(1)
 	}
-	dependencyDir = os.Args[3]
 
-	addr := os.Args[1]
-	port := os.Args[2]
-	client, err := rpc.Dial("tcp", addr+":"+port)
+	client, err := rpc.Dial("tcp", masterAddr+":"+masterPort)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	task := Task{}
-	slave := Slave{Todo: "todo"}
+	task = Task{}
+	slave := Slave{Addr:slaveAddr+":"+slavePort}
 	var result Result
     var reply bool
+
+	// start RPC server for the master to contact us
+	// if no task available when calling GiveTask
+	// (it's more efficient than starting it and closing it
+	// dynamically when needed)
+	done = make(chan bool, 1)
+	go Serve(slavePort)
+	// TODO: handle errors
+
+	/*
+	if err != nil {
+		fmt.Println("Cannot start server:", err)
+		os.Exit(1)
+	}
+	*/
+
+
     for {
         err = client.Call("MasterService.GiveTask", &slave, &task)
         if err != nil {
             fmt.Println(err)
             return
         }
+
         if len(task.Rule.Target) == 0 {
-            break
+			<-hasTask
+			continue
         }
 
         work(task)

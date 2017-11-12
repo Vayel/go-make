@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"net/rpc"
 	"path"
 	"strings"
 )
@@ -59,10 +60,15 @@ func isReady(rule *Rule) bool {
 
 func terminate() {
     fmt.Println(firstTarget, "rule has been computed!")
+
+	// Tell waiting slaves to shutdown
+	for _,slave := range waitingSlaves {
+		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
+		slaveClient.Call("SlaveService.ShutDown", nil, nil)
+	}
+
     // Kill the RPC server
     done <- true
-    // TODO:
-    //    * kill waiting slaves
 }
 
 func getAbsolutePath(relPath string) (string, error) {
@@ -132,7 +138,7 @@ func main() {
 
 	port := os.Args[3]
     done = make(chan bool, 1)
-	err = Serve(port, done)
+	err = Serve(port)
 	if err != nil {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)
