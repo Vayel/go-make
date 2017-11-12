@@ -1,0 +1,11 @@
+
+all: one two
+	echo "all" > outputfiles/all
+
+one:
+	sleep 5
+	echo "one" > outputfiles/one
+
+two:
+	sleep 5
+	echo "two" > outputfiles/two
