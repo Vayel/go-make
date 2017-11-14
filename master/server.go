@@ -19,48 +19,65 @@ var waitingSlaves []*Slave
 // The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     m.reqMutex.Lock()
-    defer m.reqMutex.Unlock()
+    if len(readyRules) == 0 {
+	    waitingSlaves = append(waitingSlaves, slave)
+        m.reqMutex.Unlock()
+        return
+    }
 
-	for k, rule := range readyRules {
-		requiredFiles := make(RequiredFiles)
-		for _, dependency := range rule.Dependencies {
-			requiredFiles[dependency], err = ReadFile(path.Join(resultDir, dependency))
-			if err != nil {
-				return
-			}
-		}
-		*reply = Task{Rule: *rule, RequiredFiles: requiredFiles}
-		delete(readyRules, k)
-		return
-	}
-	waitingSlaves = append(waitingSlaves, slave)
+    var rule *Rule
+    for k, r := range readyRules {
+        rule = r
+        delete(readyRules, k)
+        break
+    }
+    // We unlock the mutex here as the following loop may take a while
+    m.reqMutex.Unlock()
+
+    requiredFiles := make(RequiredFiles)
+    for _, dependency := range rule.Dependencies {
+        requiredFiles[dependency], err = ReadFile(path.Join(resultDir, dependency))
+        if err != nil {
+            return
+        }
+    }
+    *reply = Task{Rule: *rule, RequiredFiles: requiredFiles}
 	return
 }
 
 // The method called by slave when they terminate a task
 func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
-    m.reqMutex.Lock()
-    defer m.reqMutex.Unlock()
-
 	*end = false
 	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
+
+    m.reqMutex.Lock()
+
 	executedRules[result.Rule.Target] = true
 	updateParents(result.Rule.Target)
 
 	if result.Rule.Target == firstTarget {
 		*end = true
 		terminate()
+        m.reqMutex.Unlock()
 		return nil
 	}
 
+	if len(readyRules) == 0 {
+        m.reqMutex.Unlock()
+        return nil
+    }
+
 	// If tasks appeared, wake up all slaves for them to ask for work
-	if len(readyRules) != 0 {
-		for _, slave := range waitingSlaves {
-			slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
-			slaveClient.Call("SlaveService.WakeUp", true, nil)
-		}
-		waitingSlaves = make([]*Slave, 0)
-	}
+    slavesToWakeUp := make([]*Slave, len(waitingSlaves))
+    copy(slavesToWakeUp, waitingSlaves)
+    waitingSlaves = make([]*Slave, 0)
+    // We unlock the mutex here as the following loop may take a while
+    m.reqMutex.Unlock()
+
+    for _, slave := range slavesToWakeUp {
+        slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
+        slaveClient.Call("SlaveService.WakeUp", true, nil)
+    }
 	return nil
 }
 
