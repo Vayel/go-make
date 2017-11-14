@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"time"
+    "strings"
 )
 
 // The keys are the targets
@@ -93,6 +94,15 @@ func getAbsolutePath(relPath string) (string, error) {
 	return path.Join(wdir, relPath), nil
 }
 
+func printRules(rules *Rules) {
+    for target, rule := range *rules {
+        fmt.Print(target, ": ", strings.Join(rule.Dependencies, " "), "\n")
+        for _, cmd := range rule.Commands {
+            fmt.Println(CommandPrefix, cmd)
+        }
+    }
+}
+
 func main() {
 	// Time measures
 	logfile, errf := os.OpenFile("time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
@@ -137,6 +147,7 @@ func main() {
 		f.Close()
 		os.Exit(1)
 	}
+    printRules(&rules)
 
 	firstTarget = os.Args[2]
 

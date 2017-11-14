@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"strings"
+    "math"
 )
 
 func getLineType(line string) int {
@@ -34,14 +35,29 @@ func parseCommand(line string) string {
 	return strings.TrimSpace(line)
 }
 
-func Parse(f *os.File, rules *Rules) (err error) {
+func ParseSection(f *os.File, rules *Rules, begin int64, end int64) (err error) {
 	rd := bufio.NewReader(f)
 	var line, target string
 	var dependencies []string
 
-	for err == nil {
+    _, err = f.Seek(begin, 0)
+    if err != nil {
+        return
+    }
+    // Reach the end of the line
+    _, err = rd.ReadString('\n')
+    if err != nil {
+        return
+    }
+    // Reach the beginning of the next rule
+    for err == nil{
 		line, err = rd.ReadString('\n')
-
+		if getLineType(line) == HeaderType {
+            break
+        }
+    }
+    
+    for pos, e := f.Seek(0, 1); e == nil && err == nil && pos <= end; {
 		if getLineType(line) == HeaderType {
 			target, dependencies, err = parseHeader(line)
 			if err != nil {
@@ -53,11 +69,23 @@ func Parse(f *os.File, rules *Rules) (err error) {
 			cmd := parseCommand(line)
 			(*rules)[target].Commands = append((*rules)[target].Commands, cmd)
 		}
+		line, err = rd.ReadString('\n')
 	}
-
 	if err != io.EOF {
-		return err
+		return
 	}
+    return nil
+}
 
-	return nil
+
+func Parse(f *os.File, rules *Rules) (err error) {
+    fi, err := f.Stat()
+    if err != nil {
+        return
+    }
+    size := fi.Size()
+    middle := int64(math.Floor(float64(size)/2))
+    ParseSection(f, rules, 0, middle)
+    ParseSection(f, rules, middle, size)
+	return
 }
