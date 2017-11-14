@@ -46,8 +46,7 @@ func help() {
 }
 
 func main() {
-	startTime := time.Now()
-	var workTime, waitTime time.Duration = 0, 0
+
 	hasTask = make(chan bool, 1)
 
 	if len(os.Args) < 6 {
@@ -61,6 +60,16 @@ func main() {
 	slaveAddr := os.Args[3]
 	slavePort := os.Args[4]
 	dependencyDir = os.Args[5]
+
+	// Time measures
+	startTime := time.Now()
+	var workTime, waitTime time.Duration = 0, 0
+	logfile, errf := os.OpenFile("time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		log.Fatal(errf)
+	}
+	defer logfile.Close()
+	log.SetOutput(logfile)
 
 	if stat, err := os.Stat(dependencyDir); err != nil || !stat.IsDir() {
 		fmt.Println("Not a directory: " + dependencyDir)
@@ -131,7 +140,7 @@ func main() {
 	}
 
 	elapsedTime := time.Since(startTime)
-	fmt.Println("Time (slave) : ", elapsedTime)
-	fmt.Println("Work Time (slave) : ", workTime)
-	fmt.Println("Wait Time (slave) : ", waitTime)
+	log.Println("Time (slave) : ", elapsedTime)
+	log.Println("Work Time (slave) : ", workTime)
+	log.Println("Wait Time (slave) : ", waitTime)
 }

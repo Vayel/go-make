@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/rpc"
 	"os"
 	"path"
@@ -93,6 +94,14 @@ func getAbsolutePath(relPath string) (string, error) {
 }
 
 func main() {
+	// Time measures
+	logfile, errf := os.OpenFile("time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		log.Fatal(errf)
+	}
+	defer logfile.Close()
+	log.SetOutput(logfile)
+
 	startTime := time.Now()
 	if len(os.Args) != 5 {
 		fmt.Println("Invalid number of arguments")
@@ -150,5 +159,5 @@ func main() {
 	}
 
 	elapsedTime := time.Since(startTime)
-	fmt.Println("Time (master) : ", elapsedTime)
+	log.Println("Time (master) : ", elapsedTime)
 }
