@@ -5,16 +5,22 @@ import (
 	"net"
 	"net/rpc"
 	"path"
+    "sync"
 )
 
 // The exposed type does not matter, the client only looks at its exported
 // methods
-type MasterService int
+type MasterService struct {
+    reqMutex sync.Mutex
+}
 
 var waitingSlaves []*Slave
 
 // The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
+    m.reqMutex.Lock()
+    defer m.reqMutex.Unlock()
+
 	for k, rule := range readyRules {
 		requiredFiles := make(RequiredFiles)
 		for _, dependency := range rule.Dependencies {
@@ -33,6 +39,9 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 
 // The method called by slave when they terminate a task
 func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
+    m.reqMutex.Lock()
+    defer m.reqMutex.Unlock()
+
 	*end = false
 	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
 	executedRules[result.Rule.Target] = true
