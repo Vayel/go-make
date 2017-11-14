@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"time"
 )
 
 var dependencyDir string
@@ -45,6 +46,8 @@ func help() {
 }
 
 func main() {
+	startTime := time.Now()
+	var workTime, waitTime time.Duration = 0, 0
 	hasTask = make(chan bool, 1)
 
 	if len(os.Args) < 6 {
@@ -96,14 +99,19 @@ func main() {
 
 		if len(task.Rule.Target) == 0 {
 			fmt.Println("Wait for task\n")
+			startWaitTime := time.Now()
 			running := <-hasTask
+			waitTime += time.Since(startWaitTime)
 			if !running {
 				break
 			}
 			continue
 		}
 
+		startWorkTime := time.Now()
 		work(task)
+		workTime += time.Since(startWorkTime)
+
 		fileResult, err := ReadFile(dependencyDir + task.Rule.Target)
 		if err != nil {
 			fmt.Println(err)
@@ -121,4 +129,9 @@ func main() {
 
 		task = Task{}
 	}
+
+	elapsedTime := time.Since(startTime)
+	fmt.Println("Time (slave) : ", elapsedTime)
+	fmt.Println("Work Time (slave) : ", workTime)
+	fmt.Println("Wait Time (slave) : ", waitTime)
 }

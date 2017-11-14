@@ -5,6 +5,7 @@ import (
 	"net/rpc"
 	"os"
 	"path"
+	"time"
 )
 
 // The keys are the targets
@@ -92,6 +93,7 @@ func getAbsolutePath(relPath string) (string, error) {
 }
 
 func main() {
+	startTime := time.Now()
 	if len(os.Args) != 5 {
 		fmt.Println("Invalid number of arguments")
 		help()
@@ -146,4 +148,7 @@ func main() {
 		fmt.Println("Cannot start server:", err)
 		os.Exit(1)
 	}
+
+	elapsedTime := time.Since(startTime)
+	fmt.Println("Time (master) : ", elapsedTime)
 }
