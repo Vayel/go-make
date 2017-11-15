@@ -42,7 +42,7 @@ func help() {
 	fmt.Println("Help:")
 	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port dependency-dir")
 	fmt.Println("\nExample:")
-	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 ~/rpc-go/")
+	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 outputfiles/")
 }
 
 func main() {
