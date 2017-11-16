@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Ex: ./plot.sh output.png data.txt title y_label
+# Ex: ./plot_measure_type.sh output.png data.txt title y_label
 # data.txt is the form of:
 #
 # 0 y01 y02 ...
@@ -29,10 +29,10 @@ plot_args="$plot_args, '$2' u 1:$N_COLS w l"
 gnuplot <<EOF
 set terminal png
 set output "$1"
-set title "$3"
 set nokey
 set xlabel "Esclaves"
+set xtics -1,1,i$N_LINES
 set xr [-1*$X_PADDING:$N_LINES-1+$X_PADDING]
-set ylabel "$4"
+set ylabel "$3"
 plot $plot_args
 EOF

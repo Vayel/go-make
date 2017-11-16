@@ -10,10 +10,17 @@ def help():
     print('Usage: python convert_to_gnuplot.py <measures.json>')
 
 
+def mean(l):
+    return sum(l) / len(l)
+
 def save_matrix(fname, matrix):
     with open(fname, 'w') as f:
         for n, line in enumerate(matrix):
-            f.write(str(n) + ' ' + ' '.join((str(x) for x in line)) + '\n')
+            f.write(
+                str(n) + ' ' +
+                ' '.join((str(x) for x in line)) + ' ' +
+                str(mean(line)) + '\n'
+            )
 
 
 def json_to_matrix(f):
@@ -55,6 +62,6 @@ if __name__ == '__main__':
         f.close()
 
     save_matrix(TIMES_FNAME, times)
-    seq_time = sum(times[0]) / len(times[0])
+    seq_time = mean(times[0])
     save_matrix(SPEEDUPS_FNAME, build_speedups(times, seq_time))
     save_matrix(EFFICIENCIES_FNAME, build_efficiencies(times))
