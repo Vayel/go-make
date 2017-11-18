@@ -8,26 +8,26 @@
 #exemple: oarsub -I -l nodes=4,walltime=0:45 -t deploy
 
 #launch the script
+UNIQ_FILE_NODES=$(uniq OAR_FILE_NODES)
 
 kadeploy3 -f $OAR_FILE_NODES -e wheezy-x64-nfs -k
 
-uniq $OAR_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get update" ]
+$UNIQ_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get update" ]
 
-uniq $OAR_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get install golang-go unzip git -y" ]
+$UNIQ_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get install golang-go unzip git -y" ]
 
-uniq $OAR_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "wget https://github.com/Vayel/go-make/archive/master.zip" ]
+$UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "wget https://github.com/Vayel/go-make/archive/master.zip" ]
 
-uniq $OAR_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "unzip master.zip" ]
+$UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "unzip master.zip" ]
 
-uniq $OAR_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "cd go-make-master && make" ]
+$UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "cd go-make-master && make" ]
 
-head -1 $OAR_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
+head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
-taktuk -m "$(head -1 $OAR_FILE_NODES)" broadcast exec [ "nohup ./go-make-master/bin/master go-make-master/makefiles/10 all 10000 go-make-master/outputfiles/" ] &
+taktuk -m "$(head -1 $UNIQ_FILE_NODES)" broadcast exec [ "nohup ./go-make-master/bin/master go-make-master/makefiles/10 all 10000 go-make-master/outputfiles/" ] &
 
-nodes=$(uniq $OAR_FILE_NODES)
-master=$(head -1 $OAR_FILE_NODES)
-nodes_without_master=$(uniq $OAR_FILE_NODES | tail -n +2)
+master=$(head -1 $UNIQ_FILE_NODES)
+nodes_without_master=$(UNIQ_FILE_NODES | tail -n +2)
 for machine in $nodes_without_master
 do
     taktuk -m $machine broadcast exec [ "nohup ./go-make-master/bin/slave $master 10000 $machine 40000 go-make-master/outputfiles/" ] &

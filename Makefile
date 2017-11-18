@@ -1,4 +1,4 @@
-target = all
+target = cube.mpg
 output = outputfiles/
 masteraddr = localhost
 masterport = 10000
