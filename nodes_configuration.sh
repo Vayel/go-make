@@ -11,8 +11,6 @@
 #launch the script
 
 
-oarsub -I -l nodes=4,walltime=0:15 -t deploy
-
 UNIQ_FILE_NODES=$(uniq $OAR_FILE_NODES)
 
 kadeploy3 -f $UNIQ_FILE_NODES -e wheezy-x64-nfs -k
