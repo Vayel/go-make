@@ -15,15 +15,15 @@ UNIQ_FILE_NODES=$(uniq $OAR_FILE_NODES)
 
 kadeploy3 -f $UNIQ_FILE_NODES -e wheezy-x64-nfs -k
 
-taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get update" ]
+echo $UNIQ_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get update" ]
 
-taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get install golang-go unzip git -y" ]
+echo $UNIQ_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get install golang-go unzip git -y" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "wget https://github.com/Vayel/go-make/archive/master.zip" ]
+echo $UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "wget https://github.com/Vayel/go-make/archive/master.zip" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "unzip master.zip" ]
+echo $UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "unzip master.zip" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "cd go-make-master && make" ]
+echo $UNIQ_FILE_NODES | taktuk -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "cd go-make-master && make" ]
 
 #head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
