@@ -20,7 +20,7 @@ taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f grid500
 
 taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "git clone https://github.com/Vayel/go-make" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "cd go-make && make" ]
+taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "cd go-make && make master && make slave" ]
 
 #head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
