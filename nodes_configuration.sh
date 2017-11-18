@@ -6,12 +6,16 @@
 #ssh <login>@access.grid5000.fr
 #ssh <site>
 #reserve nodes as in  https://www.grid5000.fr/mediawiki/index.php/Getting_Started
-#exemple: oarsub -I -l nodes=4,walltime=0:45 -t deploy
+#exemple: oarsub -I -l nodes=4,walltime=0:15 -t deploy
 
 #launch the script
+
+
+oarsub -I -l nodes=4,walltime=0:15 -t deploy
+
 UNIQ_FILE_NODES=$(uniq $OAR_FILE_NODES)
 
-kadeploy3 -f $OAR_FILE_NODES -e wheezy-x64-nfs -k
+kadeploy3 -f $UNIQ_FILE_NODES -e wheezy-x64-nfs -k
 
 $UNIQ_FILE_NODES | taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f - broadcast exec [ "apt-get update" ]
 
