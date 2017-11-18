@@ -9,7 +9,7 @@
 #exemple: oarsub -I -l nodes=4,walltime=0:45 -t deploy
 
 #launch the script
-UNIQ_FILE_NODES=$(uniq OAR_FILE_NODES)
+UNIQ_FILE_NODES=$(uniq $OAR_FILE_NODES)
 
 kadeploy3 -f $OAR_FILE_NODES -e wheezy-x64-nfs -k
 
