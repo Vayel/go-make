@@ -7,7 +7,7 @@
 #./nodes_configuration.sh
 #UNIQ_FILE_NODES exported by nodes_configuration.sh
 
-export UNIQ_FILE_NODES=/home/lcarre/grid5000_nodes.txt
+export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 master=$(head -1 $UNIQ_FILE_NODES)
 nodes_without_master=$(cat $UNIQ_FILE_NODES | tail -n +2 | head -$1)
 for machine in $nodes_without_master

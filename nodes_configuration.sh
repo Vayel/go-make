@@ -9,7 +9,7 @@
 
 #oarsub -I -l nodes=6,walltime=0:15 -t deploy
 
-export UNIQ_FILE_NODES=/home/lcarre/grid5000_nodes.txt
+export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 
 uniq $OAR_FILE_NODES > $UNIQ_FILE_NODES
 
