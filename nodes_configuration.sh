@@ -10,7 +10,7 @@
 
 #launch the script
 
-export UNIQ_FILE_NODES=grid5000_nodes.txt
+export UNIQ_FILE_NODES=/home/lcarre/grid5000_nodes.txt
 
 uniq $OAR_FILE_NODES > $UNIQ_FILE_NODES
 
@@ -23,6 +23,12 @@ taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_F
 taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "git clone https://github.com/Vayel/go-make /tmp/go-make/" ]
 
 taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "make --directory /tmp/go-make/ master && make --directory /tmp/go-make/ slave" ]
+
+
+
+
+#taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "rm -rf /tmp/go-make" ]
+#taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "ls /tmp/go-make" ]
 
 #head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
