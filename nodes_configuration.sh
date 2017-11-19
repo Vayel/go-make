@@ -7,7 +7,7 @@
 #ssh <site>
 #reserve nodes as in  https://www.grid5000.fr/mediawiki/index.php/Getting_Started
 
-oarsub -I -l nodes=6,walltime=0:15 -t deploy
+#oarsub -I -l nodes=6,walltime=0:15 -t deploy
 
 export UNIQ_FILE_NODES=/home/lcarre/grid5000_nodes.txt
 
