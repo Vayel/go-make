@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/rpc"
 	"os"
 	"os/exec"
@@ -63,12 +62,11 @@ func main() {
 	// Time measures
 	startTime := time.Now()
 	var workTime, waitTime time.Duration = 0, 0
-	logfile, errf := os.OpenFile("time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile("/home/mdeloche/tmp/go-make/logs/time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
-		log.Fatal(errf)
+		panic(errf)
 	}
 	defer logfile.Close()
-	log.SetOutput(logfile)
 
 	if stat, err := os.Stat(dependencyDir); err != nil || !stat.IsDir() {
 		fmt.Println("Not a directory: " + dependencyDir)
@@ -140,7 +138,5 @@ func main() {
 	}
 
 	elapsedTime := time.Since(startTime)
-	log.Println("Time (slave) : ", elapsedTime)
-	log.Println("Work Time (slave) : ", workTime)
-	log.Println("Wait Time (slave) : ", waitTime)
+	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\", \"work\": \"" + workTime.String() + "\", \"wait\": \"" + waitTime.String() + "\"}")
 }

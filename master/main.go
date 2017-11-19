@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/rpc"
 	"os"
 	"time"
@@ -81,12 +80,13 @@ func terminate() {
 
 func main() {
 	// Time measures
-	logfile, errf := os.OpenFile("time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile("/home/mdeloche/tmp/go-make/logs/time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
-		log.Fatal(errf)
+		panic(errf)
+		// log.Fatal(errf)
 	}
 	defer logfile.Close()
-	log.SetOutput(logfile)
+	// log.SetOutput(logfile)
 
 	startTime := time.Now()
 	if len(os.Args) != 5 {
@@ -144,5 +144,6 @@ func main() {
 	}
 
 	elapsedTime := time.Since(startTime)
-	log.Println("Time (master) : ", elapsedTime)
+	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
+	// log.Print("{\"total\": ", elapsedTime, "}")
 }
