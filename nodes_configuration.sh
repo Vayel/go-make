@@ -28,7 +28,7 @@ taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODE
 
 
 #taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "rm -rf /tmp/go-make" ]
-#taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "ls /tmp/go-make" ]
+#taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "ls /tmp/go-make/" ]
 
 #head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
