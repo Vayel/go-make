@@ -31,7 +31,7 @@ run_slave2:
 
 .PHONY: run_master
 run_master:
-	./bin/master makefiles/$(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) $(output)
+	./bin/master $(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) $(output)
 
 clean:
 	@rm -r bin

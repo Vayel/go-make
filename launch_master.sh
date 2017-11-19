@@ -5,12 +5,8 @@
 
 ##Prerequisit##
 #./nodes_configuration.sh
+#UNIQ_FILE_NODES exported by nodes_configuration.sh
 
-if [ -z "$1" ]
-then
-    makefile="10"
-else
-    makefile=$1
-fi
-
-taktuk -m "$(head -1 $OAR_FILE_NODES)" broadcast exec [ "nohup ./go-make-master/bin/master go-make-master/makefiles/"$makefile" all 10000 go-make-master/outputfiles/" ] &
+taktuk -m "$(head -1 $UNIQ_FILE_NODES)" broadcast exec [ "nohup make --directory /tmp/go-make/ run_master $1" ] 
+master=$(head -1 $UNIQ_FILE_NODES)
+taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master makefiles/4" ] 

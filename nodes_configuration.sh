@@ -10,21 +10,19 @@
 
 #launch the script
 
-uniq $OAR_FILE_NODES > grid5000_nodes.txt
+export UNIQ_FILE_NODES=grid5000_nodes.txt
 
-kadeploy3 -f grid5000_nodes.txt -e wheezy-x64-nfs -k
+uniq $OAR_FILE_NODES > $UNIQ_FILE_NODES
 
-taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "apt-get update" ]
+kadeploy3 -f $UNIQ_FILE_NODES -e wheezy-x64-nfs -k
 
-#taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "apt-get install golang-go unzip git -y" ]
-taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "apt-get install golang-go git -y" ]
+taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get update" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "git clone https://github.com/Vayel/go-make" ]
+taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get install golang-go git -y" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "cd Go_Project && make master && make slave" ]
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "make --directory Go_Project master" ]
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "cd" ]
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f grid5000_nodes.txt broadcast exec [ "make --directory Go_Project make master && make run_master 1" ]
+taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "git clone https://github.com/Vayel/go-make /tmp/go-make/" ]
+
+taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "make --directory /tmp/go-make/ master && make --directory /tmp/go-make/ slave" ]
 
 #head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
 
