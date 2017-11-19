@@ -1,15 +1,15 @@
 
 all: one
-	echo "all" > outputfiles/all
+	echo "all" > /tmp/go-make/outputfiles/all
 
 one: two three
 	sleep 3
-	echo "one" > outputfiles/one
+	echo "one" > /tmp/go-make/outputfiles/one
 
 two: 
 	sleep 3
-	echo "two" > outputfiles/two
+	echo "two" > /tmp/go-make/outputfiles/two
 
 three:
 	sleep 3
-	echo "three" > outputfiles/three
+	echo "three" > /tmp/go-make/outputfiles/three

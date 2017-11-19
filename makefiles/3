@@ -1,12 +1,12 @@
 
 all: one two three
-	echo "all" > outputfiles/all
+	echo "all" > /tmp/go-make/outputfiles/all
 
 one:
-	echo "one" > outputfiles/one
+	echo "one" > /tmp/go-make/outputfiles/one
 
 two: three
-	echo "two" > outputfiles/two
+	echo "two" > /tmp/go-make/outputfiles/two
 
 three:
-	echo "three" > outputfiles/three
+	echo "three" > /tmp/go-make/outputfiles/three

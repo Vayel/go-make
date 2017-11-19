@@ -1,9 +1,9 @@
 
 all: one two
-	echo "all" > outputfiles/all
+	echo "all" > /tmp/go-make/outputfiles/all
 
 one:
-	echo "one" > outputfiles/one
+	echo "one" > /tmp/go-make/outputfiles/one
 
 two:
-	echo "two" > outputfiles/two
+	echo "two" > /tmp/go-make/outputfiles/two

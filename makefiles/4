@@ -1,18 +1,18 @@
 
 all: one
-	echo "all" > /tmp/go-make/outputfiles/all
+	echo "all" > /tmp/go-make/tmp/go-make/outputfiles/all
 
 one: two
-	echo "one" > /tmp/go-make/outputfiles/one
+	echo "one" > /tmp/go-make/tmp/go-make/outputfiles/one
 
 two: three
-	echo "two" > /tmp/go-make/outputfiles/two
+	echo "two" > /tmp/go-make/tmp/go-make/outputfiles/two
 
 fake: two
-	echo "ERROR" > /tmp/go-make/outputfiles/fake
+	echo "ERROR" > /tmp/go-make/tmp/go-make/outputfiles/fake
 
 faketwo: all
-	echo "ERROR" > /tmp/go-make/outputfiles/faketwo
+	echo "ERROR" > /tmp/go-make/tmp/go-make/outputfiles/faketwo
 
 three:
-	echo "three" > /tmp/go-make/outputfiles/three
+	echo "three" > /tmp/go-make/tmp/go-make/outputfiles/three

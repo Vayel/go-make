@@ -1,30 +1,30 @@
 all: a1 a2 b
-	date > outputfiles/all
+	date > /tmp/go-make/outputfiles/all
 
 a1: b1
 	sleep 5
-	date > outputfiles/a1
+	date > /tmp/go-make/outputfiles/a1
 
 b1: c1
 	sleep 5
-	date > outputfiles/b1
+	date > /tmp/go-make/outputfiles/b1
 
 c1: d
 	sleep 5
-	date > outputfiles/c1
+	date > /tmp/go-make/outputfiles/c1
     
 a2: b2
 	sleep 5
-	date > outputfiles/a2
+	date > /tmp/go-make/outputfiles/a2
 
 b2: d
 	sleep 5
-	date > outputfiles/b2
+	date > /tmp/go-make/outputfiles/b2
 
 b:
 	sleep 5
-	date > outputfiles/b
+	date > /tmp/go-make/outputfiles/b
 
 d:
 	sleep 5
-	date > outputfiles/d
+	date > /tmp/go-make/outputfiles/d

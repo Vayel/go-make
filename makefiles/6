@@ -1,8 +1,8 @@
 
 all: one
-	echo "all" > outputfiles/all
+	echo "all" > /tmp/go-make/outputfiles/all
 
 one:
-	echo "one start" > outputfiles/one
+	echo "one start" > /tmp/go-make/outputfiles/one
 	sleep 3
-	echo "one end" >> outputfiles/one
+	echo "one end" >> /tmp/go-make/outputfiles/one

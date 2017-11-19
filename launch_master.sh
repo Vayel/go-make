@@ -7,8 +7,7 @@
 #./nodes_configuration.sh
 #UNIQ_FILE_NODES exported by nodes_configuration.sh
 
+export UNIQ_FILE_NODES=/home/lcarre/grid5000_nodes.txt
 master=$(head -1 $UNIQ_FILE_NODES)
 taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master $1" ] 
-taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master makefiles/4" ] 
-#taktuk -m $master broadcast exec [ "nohup make --directory /tmp/go-make/ run_master $1" ] 
-#taktuk -m $master broadcast exec [ "/tmp/go-make/bin/master /tmp/go-make/makefiles/4 all 10000 /tmp/go-make/outputfiles/" ] 
+#taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master makefiles/4" ] 

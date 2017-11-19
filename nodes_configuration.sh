@@ -30,15 +30,15 @@ taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODE
 #taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "rm -rf /tmp/go-make" ]
 #taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "ls /tmp/go-make/" ]
 
-#head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 outputfiles/ ]
+#head -1 $UNIQ_FILE_NODES | taktuk -m - broadcast exec [ nohup ./go-make-master/bin/master makefiles/10 all 10000 tmp/go-make/outputfiles/ ]
 
-#taktuk -m "$(head -1 $UNIQ_FILE_NODES)" broadcast exec [ "nohup ./go-make-master/bin/master go-make-master/makefiles/10 all 10000 go-make-master/outputfiles/" ] &
+#taktuk -m "$(head -1 $UNIQ_FILE_NODES)" broadcast exec [ "nohup ./go-make-master/bin/master go-make-master/makefiles/10 all 10000 go-make-master/tmp/go-make/outputfiles/" ] &
 
 #master=$(head -1 $UNIQ_FILE_NODES)
 #nodes_without_master=$(UNIQ_FILE_NODES | tail -n +2)
 #for machine in $nodes_without_master
 #do
-    #taktuk -m $machine broadcast exec [ "nohup ./go-make-master/bin/slave $master 10000 $machine 40000 go-make-master/outputfiles/" ] &
+    #taktuk -m $machine broadcast exec [ "nohup ./go-make-master/bin/slave $master 10000 $machine 40000 go-make-master/tmp/go-make/outputfiles/" ] &
 #done
 
 #To see the machines: cat $OAR_NODES_FILES
