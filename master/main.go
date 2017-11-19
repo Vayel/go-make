@@ -5,14 +5,8 @@ import (
 	"log"
 	"net/rpc"
 	"os"
-	"path"
 	"time"
 )
-
-// The keys are the targets
-// We store pointers to rules and not rules directly to be able to update the struct
-// See https://stackoverflow.com/a/32751792
-type Rules map[string]*Rule
 
 // Use a map to efficiently determine if a rule has been executed
 type ExecutedRules map[string]bool
@@ -85,14 +79,6 @@ func terminate() {
 	done <- true
 }
 
-func getAbsolutePath(relPath string) (string, error) {
-	wdir, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	return path.Join(wdir, relPath), nil
-}
-
 func main() {
 	// Time measures
 	logfile, errf := os.OpenFile("time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
@@ -139,7 +125,6 @@ func main() {
 	}
 
 	firstTarget = os.Args[2]
-
 	if _, present := rules[firstTarget]; !present {
 		fmt.Printf("Invalid target '%s'\n", firstTarget)
 		os.Exit(1)

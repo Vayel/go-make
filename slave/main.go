@@ -46,7 +46,6 @@ func help() {
 }
 
 func main() {
-
 	hasTask = make(chan bool, 1)
 
 	if len(os.Args) < 6 {
@@ -78,7 +77,8 @@ func main() {
 
 	client, err := rpc.Dial("tcp", masterAddr+":"+masterPort)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Cannot connect to master:", err)
+        os.Exit(1)
 	}
 
 	task = Task{}
