@@ -21,15 +21,15 @@ var waitingSlaves []*Slave
 // The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     m.reqMutex.Lock()
-    defer m.reqMutex.Unlock()
 
     if finished {
+        m.reqMutex.Unlock()
         return errors.New("No more task")
     }
     if len(readyRules) == 0 {
         fmt.Println("Adding slave to waiting", (*slave).Addr)
 	    waitingSlaves = append(waitingSlaves, slave)
-        // m.reqMutex.Unlock()
+        m.reqMutex.Unlock()
         return
     }
 
@@ -40,7 +40,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
         break
     }
     // We unlock the mutex here as the following loop may take a while
-    // m.reqMutex.Unlock()
+    m.reqMutex.Unlock()
 
     requiredFiles := make(RequiredFiles)
     for _, dependency := range rule.Dependencies {
