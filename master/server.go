@@ -6,6 +6,7 @@ import (
 	"net/rpc"
 	"path"
     "sync"
+    "errors"
 )
 
 // The exposed type does not matter, the client only looks at its exported
@@ -14,11 +15,15 @@ type MasterService struct {
     reqMutex sync.Mutex
 }
 
+var finished bool
 var waitingSlaves []*Slave
 
 // The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     m.reqMutex.Lock()
+    if finished {
+        return errors.New("No more task")
+    }
     if len(readyRules) == 0 {
         fmt.Println("Adding slave to waiting", (*slave).Addr)
 	    waitingSlaves = append(waitingSlaves, slave)
@@ -63,6 +68,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 
 	if result.Rule.Target == firstTarget {
 		fmt.Println("First target seen")
+        finished = true
 		*end = true
 		terminate()
         m.reqMutex.Unlock()
