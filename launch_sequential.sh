@@ -7,4 +7,4 @@
 export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 node=$(head -1 $UNIQ_FILE_NODES)
 # TODO: change Makefile
-taktuk -m $node broadcast exec [ "/tmp/go-make/bin/sequential /tmp/go-make/makefiles/examples/blender_2.59/Makefile /tmp/go-make/outputfiles/out.avi ~/go-make/logs/time_seq.json" ] 
+taktuk -m $node broadcast exec [ "/tmp/go-make/bin/sequential /tmp/go-make/makefiles/examples/premier/Makefile list.txt ~/go-make/logs/time_seq.json" ] 
