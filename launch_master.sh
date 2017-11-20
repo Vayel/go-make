@@ -9,7 +9,7 @@
 
 slaveport = 40000
 output = /tmp/go-make/outputfiles/
-logfile = ~/go-make/logs/
+logdir = ~/go-make/logs/
 
 export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 master=$(head -1 $UNIQ_FILE_NODES)
