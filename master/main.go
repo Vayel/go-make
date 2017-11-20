@@ -140,5 +140,5 @@ func main() {
 	}
 	defer logfile.Close()
 	elapsedTime := time.Since(startTime)
-	fmt.Fprintf(logfile, "{\"total\": \"" + Milliseconds(elapsedTime) + "\"}")
+	fmt.Fprintf(logfile, "{\"total\": " + Milliseconds(elapsedTime) + "}")
 }
