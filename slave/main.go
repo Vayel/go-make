@@ -73,11 +73,6 @@ func main() {
 	// Time measures
 	startTime := time.Now()
 	var workTime, waitTime time.Duration = 0, 0
-	logfile, errf := os.OpenFile(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"), os.O_WRONLY|os.O_CREATE, 0644)
-	if errf != nil {
-		panic(errf)
-	}
-	defer logfile.Close()
 
 	if stat, err := os.Stat(dependencyDir); err != nil || !stat.IsDir() {
 		fmt.Println("Not a directory: " + dependencyDir)
@@ -152,6 +147,11 @@ func main() {
 		task = Task{}
 	}
 
+	logfile, errf := os.OpenFile(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"), os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		panic(errf)
+	}
+	defer logfile.Close()
 	elapsedTime := time.Since(startTime)
 	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\", \"work\": \"" + workTime.String() + "\", \"wait\": \"" + waitTime.String() + "\"}")
 }
