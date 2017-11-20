@@ -11,6 +11,9 @@ import time
 MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
 LOG_DIR = os.path.expanduser('~/go-make/logs')
 RESULT_PATH = os.path.join(LOG_DIR, 'time_measures.json')
+SEQ_LOGS = os.path.join(LOG_DIR, 'seq.log')
+MASTER_LOGS = os.path.join(LOG_DIR, 'master.log')
+SLAVE_LOGS = os.path.join(LOG_DIR, 'slave.log')
 
 def help():
     print('python3 test.py max_n_slaves n_slaves_step n_reps')
@@ -19,32 +22,30 @@ def help():
 
 
 def launch_master(q):
-    proc = subprocess.call(["./launch_master.sh"])
-    with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
-        data = json.load(f)
-        q.put(data['total'])
-    """
-    for f in glob.glob(os.path.join(LOG_DIR, 'time_*.json')):
-        with open(f) as logfile:
-            print(f)
-            res.append((f, json.load(logfile)))
-    q.put(res)
-    """
+    with open(MASTER_LOGS, 'w') as logfile:
+        proc = subprocess.call("./launch_master.sh", stdout=logfile)
+        with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
+            data = json.load(f)
+            q.put(data['total'])
 
 
 def run_para(n_slaves):
+    print('Run parallel with {} slaves'.format(n_slaves))
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q]).start()
     time.sleep(3)
-    subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
+    with open(SLAVE_LOGS, 'w') as logfile:
+        subprocess.Popen(["./launch_slave.sh",  str(n_slaves)], stdout=logfile)
     return q.get()
 
 
 def run_seq():
-    subprocess.call("./launch_sequential.sh")
-    with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
-        mes = json.load(f)
-    return mes['total']
+    print('Run sequential')
+    with open(SEQ_LOGS, 'w') as logfile:
+        subprocess.call("./launch_sequential.sh", stdout=logfile)
+        with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
+            mes = json.load(f)
+        return mes['total']
 
 
 if __name__ == '__main__':
