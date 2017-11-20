@@ -21,13 +21,15 @@ var waitingSlaves []*Slave
 // The method called by slaves to ask for work
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     m.reqMutex.Lock()
+    defer m.reqMutex.Unlock()
+
     if finished {
         return errors.New("No more task")
     }
     if len(readyRules) == 0 {
         fmt.Println("Adding slave to waiting", (*slave).Addr)
 	    waitingSlaves = append(waitingSlaves, slave)
-        m.reqMutex.Unlock()
+        // m.reqMutex.Unlock()
         return
     }
 
@@ -38,7 +40,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
         break
     }
     // We unlock the mutex here as the following loop may take a while
-    m.reqMutex.Unlock()
+    // m.reqMutex.Unlock()
 
     requiredFiles := make(RequiredFiles)
     for _, dependency := range rule.Dependencies {
@@ -59,6 +61,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
 
     m.reqMutex.Lock()
+    defer m.reqMutex.Unlock()
 
 	executedRules[result.Rule.Target] = true
 	updateParents(result.Rule.Target)
@@ -71,13 +74,13 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
         finished = true
 		*end = true
 		terminate()
-        m.reqMutex.Unlock()
+        // m.reqMutex.Unlock()
 		return nil
 	}
 
 	if len(readyRules) == 0 {
 		fmt.Println("No more readyRules")
-        m.reqMutex.Unlock()
+        // m.reqMutex.Unlock()
         return nil
     }
 
@@ -98,7 +101,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
         }
     }
 	fmt.Println("Finished waking up waiting slaves")
-    m.reqMutex.Unlock()
+    // m.reqMutex.Unlock()
 	return nil
 }
 
