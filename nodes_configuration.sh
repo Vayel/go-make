@@ -17,7 +17,7 @@ kadeploy3 -f $UNIQ_FILE_NODES -e wheezy-x64-nfs -k
 
 taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get update" ]
 
-taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get install golang-go git -y" ]
+taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "apt-get install blender ffmpeg golang-go git unzip -y" ]
 
 taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "git clone https://github.com/Vayel/go-make /tmp/go-make/" ]
 
