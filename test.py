@@ -5,6 +5,7 @@ import subprocess
 import glob
 import threading
 import queue
+import time
 
 
 MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
@@ -30,6 +31,7 @@ def launch_master(q):
 def run_para(n_slaves):
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q]).start()
+    time.sleep(3)
     subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
     return q.get()
 
