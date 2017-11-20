@@ -47,8 +47,9 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 	return
 }
 
-// The method called by slave when they terminate a task
+The method called by slave when they terminate a task
 func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
+	fmt.Println("Start ReceiveResult")
 	*end = false
 	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
 
@@ -57,7 +58,11 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 	executedRules[result.Rule.Target] = true
 	updateParents(result.Rule.Target)
 
+	fmt.Println("Target received: " + result.Rule.Target)
+	fmt.Println("First target: " + firstTarget)
+
 	if result.Rule.Target == firstTarget {
+		fmt.Println("First target seen")
 		*end = true
 		terminate()
         m.reqMutex.Unlock()
@@ -65,9 +70,12 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 	}
 
 	if len(readyRules) == 0 {
+		fmt.Println("No more readyRules")
         m.reqMutex.Unlock()
         return nil
     }
+
+	fmt.Println("Waking up all waiting slaves")
 
 	// If tasks appeared, wake up all slaves for them to ask for work
     slavesToWakeUp := make([]*Slave, len(waitingSlaves))
