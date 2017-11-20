@@ -4,6 +4,7 @@ masteraddr = localhost
 masterport = 10000
 slaveaddr = localhost
 slaveport = 40000
+logfile = log.json
 
 all: master slave
 
@@ -34,7 +35,7 @@ slave:
 
 .PHONY: run_seq
 run_seq:
-	@./bin/sequential $(filter-out run_seq, $(MAKECMDGOALS)) $(target)
+	@./bin/sequential $(filter-out run_seq, $(MAKECMDGOALS)) $(target) $(logfile)
 
 .PHONY: run_slave1
 run_slave1:
@@ -46,7 +47,7 @@ run_slave2:
 
 .PHONY: run_master
 run_master:
-	./bin/master $(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) $(output)
+	./bin/master $(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) $(output) $(logfile)
 
 clean:
 	@rm -r bin

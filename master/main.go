@@ -79,21 +79,20 @@ func terminate() {
 }
 
 func main() {
-	// Time measures
-	logfile, errf := os.OpenFile("/tmp/go-make/logs/time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
-	if errf != nil {
-		panic(errf)
-		// log.Fatal(errf)
-	}
-	defer logfile.Close()
-	// log.SetOutput(logfile)
-
-	startTime := time.Now()
-	if len(os.Args) != 5 {
+	if len(os.Args) != 6 {
 		fmt.Println("Invalid number of arguments")
 		help()
 		os.Exit(1)
 	}
+
+	// Time measures
+	logfile, errf := os.OpenFile(os.Args[5], os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		panic(errf)
+	}
+	defer logfile.Close()
+
+	startTime := time.Now()
 
 	resultDir = os.Args[4]
 	if stat, err := os.Stat(resultDir); err != nil || !stat.IsDir() {
@@ -145,5 +144,4 @@ func main() {
 
 	elapsedTime := time.Since(startTime)
 	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
-	// log.Print("{\"total\": ", elapsedTime, "}")
 }

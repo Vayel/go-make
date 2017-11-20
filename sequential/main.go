@@ -11,10 +11,10 @@ import (
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tsequential path-to-makefile rule-to-execute")
+	fmt.Println("\tsequential path-to-makefile rule-to-execute logpath")
 	fmt.Println("\nExamples:")
-	fmt.Println("\tsequential Makefile all")
-	fmt.Println("\tsequential ../MyMakefile test.c")
+	fmt.Println("\tsequential Makefile all log.json")
+	fmt.Println("\tsequential ../MyMakefile test.c ~/tmp/log.json")
 }
 
 func getDependentTargets(rule *Rule, rules *Rules) (dependencies []*Rule) {
@@ -53,13 +53,19 @@ func execute(target string, rules *Rules) (err error) {
 }
 
 func main() {
-
-	startTime := time.Now()
-    if len(os.Args) < 3 {
+    if len(os.Args) != 4 {
         fmt.Println("Not enough arguments")
         help()
         os.Exit(1)
     }
+
+    logfile, errf := os.OpenFile(os.Args[3], os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		panic(errf)
+	}
+	defer logfile.Close()
+
+	startTime := time.Now()
 
     path := os.Args[1]
     path, err := getAbsolutePath(path)
@@ -94,6 +100,5 @@ func main() {
     }
 
 	elapsedTime := time.Since(startTime)
-    fmt.Println(elapsedTime)
-	// fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
+	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
 }
