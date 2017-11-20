@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"time"
+	"strconv"
 )
 
 const fileMode = 0644
@@ -64,5 +65,5 @@ func WriteFile(filename string, bytes []byte) error {
 }
 
 func Milliseconds(duration time.Duration) string {
-	return string(duration.Nanoseconds()/1000000)
+	return strconv.FormatInt(duration.Nanoseconds() / 1000000, 10)
 }
