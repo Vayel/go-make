@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"path"
 	"time"
+    "io/ioutil"
+    "errors"
 )
 
 var dependencyDir string
@@ -28,10 +30,19 @@ func writeFiles(requiredFiles RequiredFiles) error {
 func work(task Task) (err error) {
 	fmt.Println("Begin", task.Rule.Target)
 	writeFiles(task.RequiredFiles)
-	for _, cmd := range task.Rule.Commands {
-		if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
-			return e
-		}
+	for _, c := range task.Rule.Commands {
+        cmd := exec.Command("sh", "-c", c)
+        stderr, err := cmd.StderrPipe()
+        if err != nil {
+            return err
+        }
+        if err := cmd.Start(); err != nil {
+            return err
+        }
+        slurp, _ := ioutil.ReadAll(stderr)
+        if err := cmd.Wait(); err != nil {
+            return errors.New(fmt.Sprintf("%s", slurp))
+        }
 	}
 	fmt.Println("End", task.Rule.Target, "\n")
 	return
