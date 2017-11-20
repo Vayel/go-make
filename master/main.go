@@ -80,7 +80,7 @@ func terminate() {
 
 func main() {
 	// Time measures
-	logfile, errf := os.OpenFile("~/tmp/go-make/logs/time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile("/tmp/go-make/logs/time_master.log", os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
 		panic(errf)
 		// log.Fatal(errf)

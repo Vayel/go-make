@@ -62,7 +62,7 @@ func main() {
 	// Time measures
 	startTime := time.Now()
 	var workTime, waitTime time.Duration = 0, 0
-	logfile, errf := os.OpenFile("~/tmp/go-make/logs/time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile("/tmp/go-make/logs/time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
 		panic(errf)
 	}
