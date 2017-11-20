@@ -17,6 +17,7 @@ N_COLS=`head -n1 "$2" | grep -o " " | wc -l`
 N_COLS=$((N_COLS+1))
 N_LINES=`wc -l < "$2"`
 X_PADDING=0.5
+MAX_SLAVES=`tail -n 1 "$2" | cut -d ' ' -f1`
 plot_args="'$2' u 1:2"
 
 # -1 because the last column is the average and is plotted differently
@@ -31,8 +32,8 @@ set terminal png
 set output "$1"
 set nokey
 set xlabel "Esclaves"
-set xtics -1,1,i$N_LINES
-set xr [-1*$X_PADDING:$N_LINES-1+$X_PADDING]
+set xtics -1,1,$MAX_SLAVES
+set xr [-1*$X_PADDING:$MAX_SLAVES+$X_PADDING]
 set ylabel "$3"
 plot $plot_args
 EOF
