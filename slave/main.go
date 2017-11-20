@@ -111,8 +111,8 @@ func main() {
 	for {
 		err = client.Call("MasterService.GiveTask", &slave, &task)
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Println("Error calling GiveTask", err)
+            break
 		}
 
 		if len(task.Rule.Target) == 0 {
@@ -130,19 +130,20 @@ func main() {
 		err = work(task)
         if err != nil {
             fmt.Println("Error working", err)
+            break
         }
 		workTime += time.Since(startWorkTime)
 
 		fileResult, err := ReadFile(path.Join(dependencyDir, task.Rule.Target))
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Println("Error reading file", err)
+            break
 		}
 		result = Result{Rule: task.Rule, Output: fileResult}
 		err = client.Call("MasterService.ReceiveResult", &result, &end)
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Println("Error calling ReceiveResult", err)
+            break
 		}
 		if end {
 			break
