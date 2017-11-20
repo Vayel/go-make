@@ -118,9 +118,13 @@ func main() {
 		if len(task.Rule.Target) == 0 {
 			fmt.Println("Wait for task\n")
 			startWaitTime := time.Now()
+			fmt.Println("1\n")
 			running := <-hasTask
+			fmt.Println("2\n")
 			waitTime += time.Since(startWaitTime)
+			fmt.Println("3\n")
 			if !running {
+				fmt.Println("4\n")
 				break
 			}
 			continue
