@@ -8,7 +8,7 @@ import queue
 
 
 MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
-RESULT_PATH = os.path.expanduser('/tmp/go-make/logs/time_measures.json')
+RESULT_PATH = os.path.expanduser('~/go-make/logs/time_measures.json')
 
 def help():
     print('python3 test.py max_n_slaves n_slaves_step n_reps')
@@ -18,7 +18,7 @@ def help():
 def launch_master(q):
     proc = subprocess.run(["./launch_master.sh"])
     res = []
-    for f in glob.glob(os.path.expanduser('/tmp/go-make/logs/time_*.log')):
+    for f in glob.glob(os.path.expanduser('~/go-make/logs/time_*.log')):
         with open(f) as logfile:
             res.append((f, json.load(logfile)))
     q.put(res)
@@ -36,9 +36,8 @@ if __name__ == '__main__':
     N_SLAVES_STEP = int(sys.argv[2])
     assert N_SLAVES_STEP > 0
     N_REPS = int(sys.argv[3])
-    assert N_REPS > 1
+    assert N_REPS >= 1
 
-    subprocess.run("./nodes_configuration.sh")
     measures = {}
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
