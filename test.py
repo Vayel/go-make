@@ -18,10 +18,11 @@ def help():
 
 
 def launch_master(q):
-    proc = subprocess.run(["./launch_master.sh"])
+    proc = subprocess.call(["./launch_master.sh"])
     res = []
     for f in glob.glob(os.path.join(LOG_DIR, 'time_*.json')):
         with open(f) as logfile:
+            print(f)
             res.append((f, json.load(logfile)))
     q.put(res)
 
@@ -34,7 +35,7 @@ def run_para(n_slaves):
 
 
 def run_seq():
-    subprocess.run("./launch_sequential.sh")
+    subprocess.call("./launch_sequential.sh")
     with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
         mes = json.load(f)
     return mes

@@ -7,13 +7,15 @@
 #./nodes_configuration.sh
 #UNIQ_FILE_NODES exported by nodes_configuration.sh
 
-makefile = /tmp/go-make/makefiles/4
-slaveport = 40000
-output = /tmp/go-make/outputfiles/
-logdir = ~/go-make/logs/
+makefile=/tmp/go-make/makefiles/10
+masterport=10000
+output=/tmp/go-make/outputfiles/
+logdir=~/go-make/logs/
+target=all
 
 export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 master=$(head -1 $UNIQ_FILE_NODES)
-taktuk -m $master broadcast exec [ "/tmp/go-make/bin/master $makefile $slaveport $output $logfile" ] 
+taktuk -m $master broadcast exec [ "/tmp/go-make/bin/master $makefile $target $masterport $output $logdir" ] 
+sleep 3
 #taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master $1" ] 
 #taktuk -m $master broadcast exec [ "make --directory /tmp/go-make/ run_master makefiles/4" ] 
