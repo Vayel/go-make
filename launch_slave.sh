@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ##Prerequesit##
-#./launch_master.sh
+#./launch_master.sh n_slaves
 
 ##Prerequisit##
 #./nodes_configuration.sh
