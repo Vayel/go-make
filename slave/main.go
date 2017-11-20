@@ -58,8 +58,8 @@ func help() {
 func main() {
 	hasTask = make(chan bool, 1)
 
-	if len(os.Args) < 6 {
-		fmt.Println("Not enough arguments")
+	if len(os.Args) != 7 {
+		fmt.Println("Bad number of arguments:", os.Args)
 		help()
 		os.Exit(1)
 	}

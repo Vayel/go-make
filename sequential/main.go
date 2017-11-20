@@ -54,7 +54,7 @@ func execute(target string, rules *Rules) (err error) {
 
 func main() {
     if len(os.Args) != 4 {
-        fmt.Println("Not enough arguments")
+        fmt.Println("bad number of arguments:", os.Args)
         help()
         os.Exit(1)
     }

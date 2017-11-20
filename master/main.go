@@ -81,7 +81,7 @@ func terminate() {
 
 func main() {
 	if len(os.Args) != 6 {
-		fmt.Println("Invalid number of arguments")
+		fmt.Println("Invalid number of arguments:", os.Args)
 		help()
 		os.Exit(1)
 	}
