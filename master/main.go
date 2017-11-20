@@ -101,12 +101,6 @@ func main() {
 	}
 
 	path := os.Args[1]
-	path, err := getAbsolutePath(path)
-	if err != nil {
-		fmt.Println("Cannot open Makefile:", err)
-		os.Exit(1)
-	}
-
 	f, err := os.Open(path)
 	if err != nil {
 		fmt.Println("Cannot open Makefile:", err)

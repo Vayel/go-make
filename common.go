@@ -3,7 +3,6 @@ package main
 import (
 	"io/ioutil"
 	"os"
-	"path"
 )
 
 const fileMode = 0644
@@ -61,12 +60,4 @@ func ReadFile(filename string) ([]byte, error) {
 func WriteFile(filename string, bytes []byte) error {
 	err := ioutil.WriteFile(filename, bytes, fileMode)
 	return err
-}
-
-func getAbsolutePath(relPath string) (string, error) {
-	wdir, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	return path.Join(wdir, relPath), nil
 }
