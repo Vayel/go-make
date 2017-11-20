@@ -20,6 +20,7 @@ var waitingSlaves []*Slave
 func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     m.reqMutex.Lock()
     if len(readyRules) == 0 {
+        fmt.Println("Adding slave to waiting", (*slave).Addr)
 	    waitingSlaves = append(waitingSlaves, slave)
         m.reqMutex.Unlock()
         return
