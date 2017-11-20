@@ -13,9 +13,9 @@ def help():
 def mean(l):
     return sum(l) / len(l)
 
-def save_matrix(fname, matrix):
+def save_values(fname, values):
     with open(fname, 'w') as f:
-        for n, line in enumerate(matrix):
+        for n, line in sorted(values.items()):
             f.write(
                 str(n) + ' ' +
                 ' '.join((str(x) for x in line)) + ' ' +
@@ -24,24 +24,25 @@ def save_matrix(fname, matrix):
 
 
 def json_to_matrix(f):
-    data = json.load(f)
-    return [d['measures'] for _, d in sorted(data.items())]
+    return {int(k): v for k, v in json.load(f).items()}
 
 
-def build_speedups(times, seq_time):
-    for line in times:
-        for i, val in enumerate(line):
-            line[i] = seq_time / val
-    return times
+def build_speedups(measures, seq_time):
+    values = {}
+    for n, times in measures.items():
+        if not n:
+            continue
+        values[n] = [seq_time / val for val in times]
+    return values
 
 
 def build_efficiencies(speedups):
-    for n, line in enumerate(times):
+    values = {}
+    for n, times in speedups.items():
         if not n:
             continue
-        for i, val in enumerate(line):
-            line[i] = val / n
-    return speedups
+        values[n] = [val / n for val in times]
+    return values
 
 
 if __name__ == '__main__':
@@ -61,7 +62,8 @@ if __name__ == '__main__':
     finally:
         f.close()
 
-    save_matrix(TIMES_FNAME, times)
+    save_values(TIMES_FNAME, times)
     seq_time = mean(times[0])
-    save_matrix(SPEEDUPS_FNAME, build_speedups(times, seq_time))
-    save_matrix(EFFICIENCIES_FNAME, build_efficiencies(times))
+    speedups = build_speedups(times, seq_time)
+    save_values(SPEEDUPS_FNAME, speedups)
+    save_values(EFFICIENCIES_FNAME, build_efficiencies(speedups))
