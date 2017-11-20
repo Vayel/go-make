@@ -72,7 +72,10 @@ func terminate() {
 	// Tell waiting slaves to shutdown
 	for _, slave := range waitingSlaves {
 		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
-		slaveClient.Call("SlaveService.ShutDown", true, nil)
+		err := slaveClient.Call("SlaveService.ShutDown", true, nil)
+        if err != nil {
+            fmt.Println("Error shuting down slave:", err)
+        }
 	}
 
 	// Kill the RPC server
@@ -94,8 +97,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	path := os.Args[1]
-	f, err := os.Open(path)
+	path_ := os.Args[1]
+	f, err := os.Open(path_)
 	if err != nil {
 		fmt.Println("Cannot open Makefile:", err)
 		f.Close()

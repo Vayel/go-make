@@ -149,7 +149,8 @@ func main() {
 
 	logfile, errf := os.OpenFile(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"), os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
-		panic(errf)
+		fmt.Println(errf)
+        os.Exit(1)
 	}
 	defer logfile.Close()
 	elapsedTime := time.Since(startTime)
