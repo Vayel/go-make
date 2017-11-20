@@ -47,7 +47,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 	return
 }
 
-The method called by slave when they terminate a task
+// The method called by slave when they terminate a task
 func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 	fmt.Println("Start ReceiveResult")
 	*end = false
