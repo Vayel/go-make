@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 const fileMode = 0644
@@ -60,4 +61,8 @@ func ReadFile(filename string) ([]byte, error) {
 func WriteFile(filename string, bytes []byte) error {
 	err := ioutil.WriteFile(filename, bytes, fileMode)
 	return err
+}
+
+func Milliseconds(duration time.Duration) string {
+	return string(duration.Nanoseconds()/1000000)
 }

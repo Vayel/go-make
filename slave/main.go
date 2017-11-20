@@ -17,6 +17,7 @@ var done chan bool
 var hasTask chan bool
 var task Task
 
+
 func writeFiles(requiredFiles RequiredFiles) error {
 	for filename, bytes := range requiredFiles {
 		err := WriteFile(path.Join(dependencyDir, filename), bytes)
@@ -154,5 +155,5 @@ func main() {
 	}
 	defer logfile.Close()
 	elapsedTime := time.Since(startTime)
-	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\", \"work\": \"" + workTime.String() + "\", \"wait\": \"" + waitTime.String() + "\"}")
+	fmt.Fprintf(logfile, "{\"total\": " + Milliseconds(elapsedTime) + ", \"work\": " + Milliseconds(workTime) + ", \"wait\": " + Milliseconds(waitTime) + "}")
 }
