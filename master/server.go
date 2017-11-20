@@ -88,7 +88,6 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
     copy(slavesToWakeUp, waitingSlaves)
     waitingSlaves = make([]*Slave, 0)
     // We unlock the mutex here as the following loop may take a while
-    m.reqMutex.Unlock()
 
     for _, slave := range slavesToWakeUp {
         fmt.Println("Waking up", (*slave).Addr)
@@ -99,6 +98,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
         }
     }
 	fmt.Println("Finished waking up waiting slaves")
+    m.reqMutex.Unlock()
 	return nil
 }
 
