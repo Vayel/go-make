@@ -7,7 +7,7 @@ import threading
 import queue
 
 
-MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront être réalisés sur un minimum de 15 machines"
+MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
 RESULT_PATH = os.path.expanduser('/tmp/go-make/logs/time_measures.json')
 
 def help():
