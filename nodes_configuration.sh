@@ -21,7 +21,7 @@ taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_F
 
 taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "git clone https://github.com/Vayel/go-make /tmp/go-make/" ]
 
-taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "make --directory /tmp/go-make/ master && make --directory /tmp/go-make/ slave" ]
+taktuk -s -o connector -o status -o output='"$host: $line\n"' -f $UNIQ_FILE_NODES broadcast exec [ "make --directory /tmp/go-make/ master && make --directory /tmp/go-make/ slave && make --directory /tmp/go-make/ sequential" ]
 
 
 
