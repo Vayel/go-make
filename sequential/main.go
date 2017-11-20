@@ -59,12 +59,6 @@ func main() {
         os.Exit(1)
     }
 
-    logfile, errf := os.OpenFile(os.Args[3], os.O_WRONLY|os.O_CREATE, 0644)
-	if errf != nil {
-		panic(errf)
-	}
-	defer logfile.Close()
-
 	startTime := time.Now()
 
     path := os.Args[1]
@@ -93,6 +87,11 @@ func main() {
         os.Exit(1)
     }
 
+    logfile, errf := os.OpenFile(os.Args[3], os.O_WRONLY|os.O_CREATE, 0644)
+	if errf != nil {
+		panic(errf)
+	}
+	defer logfile.Close()
 	elapsedTime := time.Since(startTime)
 	fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
 }
