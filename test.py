@@ -22,11 +22,10 @@ def help():
 
 
 def launch_master(q):
-    with open(MASTER_LOGS, 'w') as logfile:
-        proc = subprocess.call("./launch_master.sh", stdout=logfile)
-        with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
-            data = json.load(f)
-            q.put(data['total'])
+    proc = subprocess.call("./launch_master.sh")
+    with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
+        data = json.load(f)
+        q.put(data['total'])
 
 
 def run_para(n_slaves):
@@ -34,18 +33,16 @@ def run_para(n_slaves):
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q]).start()
     time.sleep(3)
-    with open(SLAVE_LOGS, 'w') as logfile:
-        subprocess.Popen(["./launch_slave.sh",  str(n_slaves)], stdout=logfile)
+    subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
     return q.get()
 
 
 def run_seq():
     print('Run sequential')
-    with open(SEQ_LOGS, 'w') as logfile:
-        subprocess.call("./launch_sequential.sh", stdout=logfile)
-        with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
-            mes = json.load(f)
-        return mes['total']
+    subprocess.call("./launch_sequential.sh")
+    with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
+        mes = json.load(f)
+    return mes['total']
 
 
 if __name__ == '__main__':
