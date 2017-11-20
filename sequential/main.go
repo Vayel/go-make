@@ -4,6 +4,9 @@ import (
     "fmt"
     "os"
     "os/exec"
+	"time"
+    "io/ioutil"
+    "errors"
 )
 
 func help() {
@@ -31,9 +34,18 @@ func execute(target string, rules *Rules) (err error) {
         execute(dep.Target, rules)
     }
 
-    for _, cmd := range rule.Commands {
-        if e := exec.Command("sh", "-c", cmd).Run(); e != nil {
-            return e
+    for _, c := range rule.Commands {
+        cmd := exec.Command("sh", "-c", c)
+        stderr, err := cmd.StderrPipe()
+        if err != nil {
+            return err
+        }
+        if err := cmd.Start(); err != nil {
+            return err
+        }
+        slurp, _ := ioutil.ReadAll(stderr)
+        if err := cmd.Wait(); err != nil {
+            return errors.New(fmt.Sprintf("%s", slurp))
         }
     }
 
@@ -41,6 +53,8 @@ func execute(target string, rules *Rules) (err error) {
 }
 
 func main() {
+
+	startTime := time.Now()
     if len(os.Args) < 3 {
         fmt.Println("Not enough arguments")
         help()
@@ -78,4 +92,8 @@ func main() {
         fmt.Printf("Error executing target '%s': %s\n", firstTarget, e)
         os.Exit(1)
     }
+
+	elapsedTime := time.Since(startTime)
+    fmt.Println(elapsedTime)
+	// fmt.Fprintf(logfile, "{\"total\": \"" + elapsedTime.String() + "\"}")
 }
