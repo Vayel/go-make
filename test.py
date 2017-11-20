@@ -26,7 +26,7 @@ def launch_master(q):
 def run(n_slaves):
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q]).start()
-    subprocess.Popen(["./launch_slave.sh",  "n_slaves"])
+    subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
     return q.get()
 
 
