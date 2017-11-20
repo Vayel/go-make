@@ -38,6 +38,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
     for _, dependency := range rule.Dependencies {
         requiredFiles[dependency], err = ReadFile(path.Join(resultDir, dependency))
         if err != nil {
+            fmt.Println("Error reading dependency:", err)
             return
         }
     }
@@ -75,6 +76,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
     m.reqMutex.Unlock()
 
     for _, slave := range slavesToWakeUp {
+        fmt.Println("Waking up", (*slave).Addr)
         slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
         err := slaveClient.Call("SlaveService.WakeUp", true, nil)
         if err != nil {

@@ -11,12 +11,14 @@ type SlaveService int
 // master sends it to a waiting slave to tell him tasks are available
 func (m *SlaveService) WakeUp(p1 bool, p2 *bool) error {
 	// parameters are useless, but RPC needs them
+    fmt.Println("SlaveService.WakeUp received")
 	hasTask <- true
 	return nil
 }
 
 // master sends it to a waiting slave to tell him to shut down
 func (m *SlaveService) ShutDown(p1 bool, p2 *bool) error {
+    fmt.Println("SlaveService.ShutDown received")
 	hasTask <- false
 	done <- true
 	return nil

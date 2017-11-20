@@ -71,6 +71,7 @@ func terminate() {
 
 	// Tell waiting slaves to shutdown
 	for _, slave := range waitingSlaves {
+        fmt.Println("Shuting down", (*slave).Addr)
 		slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
 		err := slaveClient.Call("SlaveService.ShutDown", true, nil)
         if err != nil {
