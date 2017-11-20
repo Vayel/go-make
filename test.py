@@ -63,4 +63,4 @@ if __name__ == '__main__':
         measures[n_slaves] = [run_para(n_slaves) for _ in range(N_REPS)]
 
     with open(RESULT_PATH, 'w') as f:
-        json.dump(measures, f)
+        json.dump(measures, f, indent=4)
