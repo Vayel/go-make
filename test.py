@@ -8,7 +8,7 @@ import queue
 import time
 
 
-MIN_N_SLAVES = 14  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
+MIN_N_SLAVES = 1  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
 LOG_DIR = os.path.expanduser('~/go-make/logs')
 RESULT_PATH = os.path.join(LOG_DIR, 'time_measures.json')
 SEQ_LOGS = os.path.join(LOG_DIR, 'seq.log')
