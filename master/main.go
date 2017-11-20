@@ -134,7 +134,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	logfile, errf := os.OpenFile(path.Join(os.Args[5], "time_master.json"), os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.Create(path.Join(os.Args[5], "time_master.json"))
 	if errf != nil {
 		panic(errf)
 	}

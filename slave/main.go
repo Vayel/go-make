@@ -147,7 +147,7 @@ func main() {
 		task = Task{}
 	}
 
-	logfile, errf := os.OpenFile(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"), os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.Create(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"))
 	if errf != nil {
 		fmt.Println(errf)
         os.Exit(1)
