@@ -7,11 +7,11 @@
 #./nodes_configuration.sh
 #UNIQ_FILE_NODES exported by nodes_configuration.sh
 
-makefile=/tmp/go-make/makefiles/examples/blender_2.59/Makefile
+makefile=/tmp/go-make/makefiles/examples/premier/Makefile
 masterport=10000
 output=/tmp/go-make/outputfiles/
 logdir=~/go-make/logs/
-target=/tmp/go-make/outputfiles/out.avi
+target=list.txt
 
 export UNIQ_FILE_NODES=~/grid5000_nodes.txt
 master=$(head -1 $UNIQ_FILE_NODES)
