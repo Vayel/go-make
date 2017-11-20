@@ -17,7 +17,7 @@ master=$(head -1 $UNIQ_FILE_NODES)
 nodes_without_master=$(cat $UNIQ_FILE_NODES | tail -n +2 | head -$1)
 for machine in $nodes_without_master
 do
-    taktuk -m $machine broadcast exec [ "/tmp/go-make/bin/slave $master $masterport $machine $slaveport $output $logfile" ]
+    taktuk -m $machine broadcast exec [ "/tmp/go-make/bin/slave $master $masterport $machine $slaveport $output $logfile &" ]
 done
 
 
