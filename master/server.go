@@ -76,7 +76,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 
     for _, slave := range slavesToWakeUp {
         slaveClient, _ := rpc.Dial("tcp", (*slave).Addr)
-        err = slaveClient.Call("SlaveService.WakeUp", true, nil)
+        err := slaveClient.Call("SlaveService.WakeUp", true, nil)
         if err != nil {
             fmt.Println("Error waking up slave:", err)
         }
