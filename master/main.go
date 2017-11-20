@@ -5,6 +5,7 @@ import (
 	"net/rpc"
 	"os"
 	"time"
+    "path"
 )
 
 // Use a map to efficiently determine if a rule has been executed
@@ -20,10 +21,10 @@ var resultDir string
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port result-dir")
+	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port result-dir log-dir")
 	fmt.Println("\nExamples:")
-	fmt.Println("\tmaster Makefile all 10000 outputfiles/")
-	fmt.Println("\tmaster ../MyMakefile test.c 10000 dir/outputfiles/")
+	fmt.Println("\tmaster Makefile all 10000 outputfiles/ logdir/")
+	fmt.Println("\tmaster ../MyMakefile test.c 10000 dir/outputfiles/ logdir/")
 }
 
 // With this function, we can easily access the parents of a given rule, that is
@@ -86,7 +87,7 @@ func main() {
 	}
 
 	// Time measures
-	logfile, errf := os.OpenFile(os.Args[5], os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile(path.Join(os.Args[5], "time_master.json"), os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
 		panic(errf)
 	}

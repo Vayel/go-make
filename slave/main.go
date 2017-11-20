@@ -50,9 +50,9 @@ func work(task Task) (err error) {
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port dependency-dir")
+	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port dependency-dir logdir")
 	fmt.Println("\nExample:")
-	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 outputfiles/")
+	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 outputfiles/ logdir/")
 }
 
 func main() {
@@ -73,7 +73,7 @@ func main() {
 	// Time measures
 	startTime := time.Now()
 	var workTime, waitTime time.Duration = 0, 0
-	logfile, errf := os.OpenFile("/tmp/go-make/logs/time_slave_"+slaveAddr+"_"+slavePort+".log", os.O_WRONLY|os.O_CREATE, 0644)
+	logfile, errf := os.OpenFile(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"), os.O_WRONLY|os.O_CREATE, 0644)
 	if errf != nil {
 		panic(errf)
 	}
@@ -127,10 +127,13 @@ func main() {
 		}
 
 		startWorkTime := time.Now()
-		work(task)
+		err = work(task)
+        if err != nil {
+            fmt.Println("Error working", err)
+        }
 		workTime += time.Since(startWorkTime)
 
-		fileResult, err := ReadFile(dependencyDir + task.Rule.Target)
+		fileResult, err := ReadFile(path.Join(dependencyDir, task.Rule.Target))
 		if err != nil {
 			fmt.Println(err)
 			return
