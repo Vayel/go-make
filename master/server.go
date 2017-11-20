@@ -92,6 +92,7 @@ func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
             fmt.Println("Error waking up slave:", err)
         }
     }
+	fmt.Println("Finished waking up waiting slaves")
 	return nil
 }
 
