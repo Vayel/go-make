@@ -50,15 +50,19 @@ def run_seq(makefile_path):
 
 
 if __name__ == '__main__':
-    MIN_N_SLAVES = int(sys.argv[1])
-    MAX_N_SLAVES = int(sys.argv[2])
-    assert MAX_N_SLAVES >= MIN_N_SLAVES
-    assert MIN_N_SLAVES >= MIN_N_SLAVES_
-    N_SLAVES_STEP = int(sys.argv[3])
-    assert N_SLAVES_STEP > 0
-    N_REPS = int(sys.argv[4])
-    assert N_REPS >= 1
-    MAKEFILE = sys.argv[5]
+    try:
+        MIN_N_SLAVES = int(sys.argv[1])
+        MAX_N_SLAVES = int(sys.argv[2])
+        assert MAX_N_SLAVES >= MIN_N_SLAVES
+        assert MIN_N_SLAVES >= MIN_N_SLAVES_
+        N_SLAVES_STEP = int(sys.argv[3])
+        assert N_SLAVES_STEP > 0
+        N_REPS = int(sys.argv[4])
+        assert N_REPS >= 1
+        MAKEFILE = sys.argv[5]
+    except:
+        help()
+        sys.exit(1)
 
     measures = {}
     
