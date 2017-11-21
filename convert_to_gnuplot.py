@@ -7,14 +7,14 @@ import statistics as stats
 TIMES_FNAME = 'times.txt'
 SPEEDUPS_FNAME = 'speedups.txt'
 EFFICIENCIES_FNAME = 'efficiencies.txt'
-Z = 2.92
+STUDENT_TABLE = {3: 2.92, 5: 2.132}
 
 def help():
     print('Usage: python convert_to_gnuplot.py <measures.json>')
 
 
 def error(l):
-    return Z * stats.stdev(l) / math.sqrt(len(l))
+    return STUDENT_TABLE[len(l)] * stats.stdev(l) / math.sqrt(len(l))
 
 
 def save_values(fname, values):
