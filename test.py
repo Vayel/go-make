@@ -8,7 +8,7 @@ import queue
 import time
 
 
-MIN_N_SLAVES = 1  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
+MIN_N_SLAVES_ = 1  # Le sujet dit: "Les tests devront etre realises sur un minimum de 15 machines"
 LOG_DIR = os.path.expanduser('~/go-make/logs')
 RESULT_PATH = os.path.join(LOG_DIR, 'time_measures.json')
 SEQ_LOGS = os.path.join(LOG_DIR, 'seq.log')
@@ -16,9 +16,9 @@ MASTER_LOGS = os.path.join(LOG_DIR, 'master.log')
 SLAVE_LOGS = os.path.join(LOG_DIR, 'slave.log')
 
 def help():
-    print('python3 test.py max_n_slaves n_slaves_step n_reps')
+    print('python3 test.py min_n_slaves max_n_slaves n_slaves_step n_reps')
     print('Examples:')
-    print('\tpython3 test.py 29 5 5')
+    print('\tpython3 test.py 14 29 5 5')
 
 
 def launch_master(q):
@@ -46,11 +46,13 @@ def run_seq():
 
 
 if __name__ == '__main__':
-    MAX_N_SLAVES = int(sys.argv[1])
+    MIN_N_SLAVES = int(sys.argv[1])
+    MAX_N_SLAVES = int(sys.argv[2])
     assert MAX_N_SLAVES >= MIN_N_SLAVES
-    N_SLAVES_STEP = int(sys.argv[2])
+    assert MIN_N_SLAVES >= MIN_N_SLAVES_
+    N_SLAVES_STEP = int(sys.argv[3])
     assert N_SLAVES_STEP > 0
-    N_REPS = int(sys.argv[3])
+    N_REPS = int(sys.argv[4])
     assert N_REPS >= 1
 
     measures = {}
