@@ -31,7 +31,7 @@ def launch_master(q, makefile_path):
 
 
 def run_para(n_slaves, makefile_path):
-    print('Run parallel with {} slaves'.format(n_slaves))
+    print('Run parallel with {} slaves'.format(n_slaves), end='\n\n')
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q, makefile_path]).start()
     time.sleep(3) # wait for master to start
@@ -40,7 +40,7 @@ def run_para(n_slaves, makefile_path):
 
 
 def run_seq(makefile_path):
-    print('Run sequential')
+    print('Run sequential', end='\n\n')
     ret = subprocess.call(["./launch_sequential.sh", makefile_path])
     if ret: # Error
         return
