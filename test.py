@@ -67,6 +67,8 @@ if __name__ == '__main__':
     measures = {}
     
     measures[0] = [run_seq(MAKEFILE) for _ in range(N_REPS)]
+    with open(RESULT_PATH, 'w') as f:
+        json.dump(measures, f, indent=4)
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
         measures[n_slaves] = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
