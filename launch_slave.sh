@@ -19,5 +19,3 @@ for machine in $nodes_without_master
 do
     taktuk -m $machine broadcast exec [ "/tmp/go-make/bin/slave $master $masterport $machine $slaveport $output $logdir " ] &
 done
-
-

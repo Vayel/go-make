@@ -16,30 +16,34 @@ MASTER_LOGS = os.path.join(LOG_DIR, 'master.log')
 SLAVE_LOGS = os.path.join(LOG_DIR, 'slave.log')
 
 def help():
-    print('python3 test.py min_n_slaves max_n_slaves n_slaves_step n_reps')
+    print('python3 test.py min_n_slaves max_n_slaves n_slaves_step n_reps makefile-path')
     print('Examples:')
-    print('\tpython3 test.py 14 29 5 5')
+    print('\tpython3 test.py 14 29 5 5 /tmp/go-make/makefiles/xxx')
 
 
-def launch_master(q):
-    proc = subprocess.call("./launch_master.sh")
+def launch_master(q, makefile_path):
+    ret = subprocess.call(["./launch_master.sh", makefile_path])
+    if ret: # Error
+        return
     with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
         data = json.load(f)
         q.put(data['total'])
 
 
-def run_para(n_slaves):
+def run_para(n_slaves, makefile_path):
     print('Run parallel with {} slaves'.format(n_slaves))
     q = queue.Queue() # allows to get return value of the thread
-    threading.Thread(target=launch_master, args=[q]).start()
-    time.sleep(3)
+    threading.Thread(target=launch_master, args=[q, makefile_path]).start()
+    time.sleep(3) # wait for master to start
     subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
     return q.get()
 
 
-def run_seq():
+def run_seq(makefile_path):
     print('Run sequential')
-    subprocess.call("./launch_sequential.sh")
+    ret = subprocess.call(["./launch_sequential.sh", makefile_path])
+    if ret: # Error
+        return
     with open(os.path.join(LOG_DIR, 'time_seq.json')) as f:
         mes = json.load(f)
     return mes['total']
@@ -54,13 +58,14 @@ if __name__ == '__main__':
     assert N_SLAVES_STEP > 0
     N_REPS = int(sys.argv[4])
     assert N_REPS >= 1
+    MAKEFILE = sys.argv[5]
 
     measures = {}
     
-    measures[0] = [run_seq() for _ in range(N_REPS)]
+    measures[0] = [run_seq(MAKEFILE) for _ in range(N_REPS)]
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
-        measures[n_slaves] = [run_para(n_slaves) for _ in range(N_REPS)]
+        measures[n_slaves] = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
 
     with open(RESULT_PATH, 'w') as f:
         json.dump(measures, f, indent=4)
