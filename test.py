@@ -64,6 +64,7 @@ if __name__ == '__main__':
         help()
         sys.exit(1)
 
+    print('Remove', LOG_DIR, 'JSON files')
     measures = {}
     
     measures[0] = [run_seq(MAKEFILE) for _ in range(N_REPS)]
@@ -71,6 +72,8 @@ if __name__ == '__main__':
         json.dump(measures, f, indent=4)
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
-        measures[n_slaves] = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
+        mes = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
+        n_slaves = len(list(glob.glob(os.path.join(LOG_DIR, "time_slave*.json"))))
+        measures[n_slaves] = mes
         with open(RESULT_PATH, 'w') as f:
             json.dump(measures, f, indent=4)
