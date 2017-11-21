@@ -8,7 +8,7 @@
 #UNIQ_FILE_NODES exported by nodes_configuration.sh
 
 #makefile=/tmp/go-make/makefiles/examples/blender_2.59/Makefile
-makefile=/tmp/go-make/makefiles/11
+makefile=/tmp/go-make/makefiles/10
 masterport=10000
 output=/tmp/go-make/outputfiles/
 logdir=~/go-make/logs/
