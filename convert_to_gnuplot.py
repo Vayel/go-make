@@ -1,10 +1,12 @@
 import sys
 import json
+import math
 
 
 TIMES_FNAME = 'times.txt'
 SPEEDUPS_FNAME = 'speedups.txt'
 EFFICIENCIES_FNAME = 'efficiencies.txt'
+Z = 2.92
 
 def help():
     print('Usage: python convert_to_gnuplot.py <measures.json>')
@@ -13,13 +15,28 @@ def help():
 def mean(l):
     return sum(l) / len(l)
 
+
+def stddev(l):
+    m = mean(l)
+    errs = [(x - m)**2 for x in l]
+    return math.sqrt(mean(errs)) 
+
+
+def error(l):
+    return Z * stddev(l) / math.sqrt(len(l))
+
+
 def save_values(fname, values):
     with open(fname, 'w') as f:
         for n, line in sorted(values.items()):
+            err = error(line)
+            m = mean(line)
             f.write(
                 str(n) + ' ' +
                 ' '.join((str(x) for x in line)) + ' ' +
-                str(mean(line)) + '\n'
+                str(m) + ' ' +
+                str(m - err) + ' ' +
+                str(m + err) + '\n'
             )
 
 

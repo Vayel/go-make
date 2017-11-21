@@ -18,19 +18,20 @@ N_COLS=$((N_COLS+1))
 N_LINES=`wc -l < "$2"`
 X_PADDING=0.5
 MAX_SLAVES=`tail -n 1 "$2" | cut -d ' ' -f1`
-plot_args="'$2' u 1:2"
+plot_args="'$2' u 1:2 notitle"
 
 # -1 because the last column is the average and is plotted differently
-for n in $(seq 3 $(($N_COLS-1)))
+for n in $(seq 3 $(($N_COLS-3)))
 do
-  plot_args="$plot_args, '$2' u 1:$n"
+  plot_args="$plot_args, '$2' u 1:$n notitle"
 done
-plot_args="$plot_args, '$2' u 1:$N_COLS w l"
+plot_args="$plot_args, '$2' u 1:$(($N_COLS-2)) w l title 'Mean'"
+plot_args="$plot_args, '$2' u 1:$(($N_COLS-1)) w l title 'Low'"
+plot_args="$plot_args, '$2' u 1:$N_COLS w l title 'High'"
 
 gnuplot <<EOF
 set terminal png
 set output "$1"
-set nokey
 set xlabel "Esclaves"
 set xtics -1,1,$MAX_SLAVES
 set xr [-1*$X_PADDING:$MAX_SLAVES+$X_PADDING]
