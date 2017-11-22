@@ -17,5 +17,5 @@ slaves=$(cat $NODES | tail -n +2 | head -$1)
 
 for slave in $slaves
 do
-    taktuk -m $slave broadcast exec [ "~/slave $master $MASTER_RPC_PORT $slave $SLAVE_RPC_PORT $OUTPUT_DIR $1" ] &
+    taktuk -m $slave broadcast exec [ "$BIN_DIR/slave $master $MASTER_RPC_PORT $slave $SLAVE_RPC_PORT $OUTPUT_DIR $1" ] &
 done

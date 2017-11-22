@@ -9,5 +9,6 @@ fi
 
 . ./common.sh
 
+echo "aaaaa"
 node=$(head -1 $NODES)
-taktuk -m $node broadcast exec [ "~/sequential $1 $2 $3" ] 
+taktuk -m $node broadcast exec [ "$BIN_DIR/sequential $1 $2 $3" ] 

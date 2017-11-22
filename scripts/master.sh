@@ -12,4 +12,4 @@ fi
 OUTPUT_DIR=/tmp
 
 master=$(head -1 $NODES)
-taktuk -m $master broadcast exec [ "~/master $1 $2 $MASTER_RPC_PORT $OUTPUT_DIR $3" ] 
+taktuk -m $master broadcast exec [ "$BIN_DIR/master $1 $2 $MASTER_RPC_PORT $OUTPUT_DIR $3" ] 
