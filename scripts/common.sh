@@ -9,5 +9,6 @@ then
 fi
 
 BIN_DIR=~/
+PROJECT_DIR=~/go-make
 NODES_FILE=~/nodes.txt
 MASTER_RPC_PORT=10000
