@@ -1,4 +1,4 @@
-all: rule0 rule1 rule2 rule3 rule4 rule5 rule6 rule7 rule8 rule9 rule10 rule11 rule12 rule13 rule14 rule15 rule16 rule17 rule18 rule19 rule20 rule21 rule22 rule23 rule24 rule25 rule26 rule27 rule28 rule29 rule30 rule31 rule32 rule33 rule34 rule35 rule36 rule37 rule38 rule39
+all: rule0 rule1 rule2 rule3 rule4 rule5 rule6 rule7 rule8 rule9 rule10 rule11 rule12 rule13
 	sleep 1
 	touch all
 rule0:
@@ -43,81 +43,3 @@ rule12:
 rule13:
 	sleep 1
 	touch rule13
-rule14:
-	sleep 1
-	touch rule14
-rule15:
-	sleep 1
-	touch rule15
-rule16:
-	sleep 1
-	touch rule16
-rule17:
-	sleep 1
-	touch rule17
-rule18:
-	sleep 1
-	touch rule18
-rule19:
-	sleep 1
-	touch rule19
-rule20:
-	sleep 1
-	touch rule20
-rule21:
-	sleep 1
-	touch rule21
-rule22:
-	sleep 1
-	touch rule22
-rule23:
-	sleep 1
-	touch rule23
-rule24:
-	sleep 1
-	touch rule24
-rule25:
-	sleep 1
-	touch rule25
-rule26:
-	sleep 1
-	touch rule26
-rule27:
-	sleep 1
-	touch rule27
-rule28:
-	sleep 1
-	touch rule28
-rule29:
-	sleep 1
-	touch rule29
-rule30:
-	sleep 1
-	touch rule30
-rule31:
-	sleep 1
-	touch rule31
-rule32:
-	sleep 1
-	touch rule32
-rule33:
-	sleep 1
-	touch rule33
-rule34:
-	sleep 1
-	touch rule34
-rule35:
-	sleep 1
-	touch rule35
-rule36:
-	sleep 1
-	touch rule36
-rule37:
-	sleep 1
-	touch rule37
-rule38:
-	sleep 1
-	touch rule38
-rule39:
-	sleep 1
-	touch rule39

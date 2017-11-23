@@ -1,4 +1,4 @@
-N_CHILDREN = 40
+N_CHILDREN = 14
 SLEEP = 1
 
 deps = ['rule' + str(i) for i in range(N_CHILDREN)]
