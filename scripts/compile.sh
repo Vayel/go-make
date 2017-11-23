@@ -3,6 +3,7 @@
 . ./common.sh
 
 node=$(head -1 $NODES_FILE)
+taktuk -l root -m $node broadcast exec [ "apt-get install make" ] 
 
 for prog in "master" "slave" "sequential"
 do
