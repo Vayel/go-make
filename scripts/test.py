@@ -18,6 +18,7 @@ MASTER_LOG = os.path.join(LOG_DIR, 'master.json')
 SLAVE_LOG_PATTERN = os.path.join(LOG_DIR, 'slave_*.json')
 FIRST_RULE = 'all'
 
+os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(NODES_DIR, exist_ok=True)
 
 def help():
