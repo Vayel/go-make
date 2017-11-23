@@ -2,8 +2,10 @@
 
 if [[ -z "$1" ]]
 then
-    echo "Usage: ./slave.sh log_dir"
-    echo "Example: ./slave.sh ~/logs"
+    echo "Usage:"
+    echo -e "\t./slave.sh log_dir"
+    echo "Example:"
+    echo -e "\t./slave.sh ~/logs"
     exit
 fi
 

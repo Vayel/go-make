@@ -2,8 +2,10 @@
 
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]
 then
-    echo "Usage: ./master.sh makefile_path first_rule log_path"
-    echo "Example: ./master.sh ~/go-make/makefiles/0 all ~/logs/master.json"
+    echo "Usage:"
+    echo -e "\t./master.sh makefile_path first_rule log_path"
+    echo "Example:"
+    echo -e "\t./master.sh ~/go-make/makefiles/0 all ~/logs/master.json"
     exit
 fi
 
