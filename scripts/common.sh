@@ -8,7 +8,7 @@ then
     exit 1
 fi
 
-BIN_DIR=~/
+BIN_DIR=~
 PROJECT_DIR=~/go-make
 GENERATED_FILES_DIR=/tmp
 NODES_FILE=~/nodes.txt
