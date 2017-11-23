@@ -1,5 +1,5 @@
 N_CHILDREN = 40
-SLEEP = 2
+SLEEP = 1
 
 deps = ['rule' + str(i) for i in range(N_CHILDREN)]
 print('all:', ' '.join(deps))

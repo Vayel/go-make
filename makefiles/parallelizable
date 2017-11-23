@@ -1,320 +1,123 @@
-all: dep aa ab ac ad ae af ag ah ai aj ak al am an ao ap aq ar as at au av aw ax ay az ab bb bc bd be bf bg bh bi bj bk bl bm bn bo bp bq br bs bt bu bv bw bx by bz
-	sleep 2
-	echo all > /tmp/go-make/outputfiles/all
-
-aa: dep
-	sleep 2
-	echo aa > /tmp/go-make/outputfiles/aa
-ab: dep
-	sleep 2
-	echo ab > /tmp/go-make/outputfiles/ab
-ac: dep
-	sleep 2
-	echo ac > /tmp/go-make/outputfiles/ac
-ad: dep
-	sleep 2
-	echo ad > /tmp/go-make/outputfiles/ad
-ae: dep
-	sleep 2
-	echo ae > /tmp/go-make/outputfiles/ae
-af: dep
-	sleep 2
-	echo af > /tmp/go-make/outputfiles/af
-ag: dep
-	sleep 2
-	echo ag > /tmp/go-make/outputfiles/ag
-ah: dep
-	sleep 2
-	echo ah > /tmp/go-make/outputfiles/ah
-ai: dep
-	sleep 2
-	echo ai > /tmp/go-make/outputfiles/ai
-aj: dep
-	sleep 2
-	echo aj > /tmp/go-make/outputfiles/aj
-ak: dep
-	sleep 2
-	echo ak > /tmp/go-make/outputfiles/ak
-al: dep
-	sleep 2
-	echo al > /tmp/go-make/outputfiles/al
-am: dep
-	sleep 2
-	echo am > /tmp/go-make/outputfiles/am
-an: dep
-	sleep 2
-	echo an > /tmp/go-make/outputfiles/an
-ao: dep
-	sleep 2
-	echo ao > /tmp/go-make/outputfiles/ao
-ap: dep
-	sleep 2
-	echo ap > /tmp/go-make/outputfiles/ap
-aq: dep
-	sleep 2
-	echo aq > /tmp/go-make/outputfiles/aq
-ar: dep
-	sleep 2
-	echo ar > /tmp/go-make/outputfiles/ar
-as: dep
-	sleep 2
-	echo as > /tmp/go-make/outputfiles/as
-at: dep
-	sleep 2
-	echo at > /tmp/go-make/outputfiles/at
-au: dep
-	sleep 2
-	echo au > /tmp/go-make/outputfiles/au
-av: dep
-	sleep 2
-	echo av > /tmp/go-make/outputfiles/av
-aw: dep
-	sleep 2
-	echo aw > /tmp/go-make/outputfiles/aw
-ax: dep
-	sleep 2
-	echo ax > /tmp/go-make/outputfiles/ax
-ay: dep
-	sleep 2
-	echo ay > /tmp/go-make/outputfiles/ay
-az: dep
-	sleep 2
-	echo az > /tmp/go-make/outputfiles/az
-ba: dep
-	sleep 2
-	echo ba > /tmp/go-make/outputfiles/ba
-bb: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bb
-bc: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bc
-bd: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bd
-be: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/be
-bf: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bf
-bg: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bg
-bh: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bh
-bi: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bi
-bj: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bj
-bk: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bk
-bl: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bl
-bm: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bm
-bn: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bn
-bo: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bo
-bp: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bp
-bq: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bq
-br: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/br
-bs: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bs
-bt: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bt
-bu: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bu
-bv: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bv
-bw: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bw
-bx: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bx
-by: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/by
-bz: dep
-	sleep 2
-	echo bb > /tmp/go-make/outputfiles/bz
-ca: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ca
-cb: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cb
-cc: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cc
-cd: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cd
-ce: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ce
-cf: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cf
-cg: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cg
-ch: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ch
-ci: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ci
-cj: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cj
-ck: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ck
-cl: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cl
-cm: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cm
-cn: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cn
-co: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/co
-cp: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cp
-cq: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cq
-cr: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cr
-cs: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cs
-ct: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/ct
-cu: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cu
-cv: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cv
-cw: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cw
-cx: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cx
-cy: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cy
-cz: dep
-	sleep 2
-	echo ca > /tmp/go-make/outputfiles/cz
-da: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/da
-db: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/db
-dc: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dc
-dd: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dd
-de: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/de
-df: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/df
-dg: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dg
-dh: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dh
-di: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/di
-dj: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dj
-dk: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dk
-dl: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dl
-dm: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dm
-dn: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dn
-do: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/do
-dp: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dp
-dq: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dq
-dr: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dr
-ds: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/ds
-dt: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dt
-du: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/du
-dv: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dv
-dw: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dw
-dx: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dx
-dy: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dy
-dz: dep
-	sleep 2
-	echo da > /tmp/go-make/outputfiles/dz
-
-dep:
-	sleep 2
-	echo "dep" > /tmp/go-make/outputfiles/dep
+all: rule0 rule1 rule2 rule3 rule4 rule5 rule6 rule7 rule8 rule9 rule10 rule11 rule12 rule13 rule14 rule15 rule16 rule17 rule18 rule19 rule20 rule21 rule22 rule23 rule24 rule25 rule26 rule27 rule28 rule29 rule30 rule31 rule32 rule33 rule34 rule35 rule36 rule37 rule38 rule39
+	sleep 1
+	touch all
+rule0:
+	sleep 1
+	touch rule0
+rule1:
+	sleep 1
+	touch rule1
+rule2:
+	sleep 1
+	touch rule2
+rule3:
+	sleep 1
+	touch rule3
+rule4:
+	sleep 1
+	touch rule4
+rule5:
+	sleep 1
+	touch rule5
+rule6:
+	sleep 1
+	touch rule6
+rule7:
+	sleep 1
+	touch rule7
+rule8:
+	sleep 1
+	touch rule8
+rule9:
+	sleep 1
+	touch rule9
+rule10:
+	sleep 1
+	touch rule10
+rule11:
+	sleep 1
+	touch rule11
+rule12:
+	sleep 1
+	touch rule12
+rule13:
+	sleep 1
+	touch rule13
+rule14:
+	sleep 1
+	touch rule14
+rule15:
+	sleep 1
+	touch rule15
+rule16:
+	sleep 1
+	touch rule16
+rule17:
+	sleep 1
+	touch rule17
+rule18:
+	sleep 1
+	touch rule18
+rule19:
+	sleep 1
+	touch rule19
+rule20:
+	sleep 1
+	touch rule20
+rule21:
+	sleep 1
+	touch rule21
+rule22:
+	sleep 1
+	touch rule22
+rule23:
+	sleep 1
+	touch rule23
+rule24:
+	sleep 1
+	touch rule24
+rule25:
+	sleep 1
+	touch rule25
+rule26:
+	sleep 1
+	touch rule26
+rule27:
+	sleep 1
+	touch rule27
+rule28:
+	sleep 1
+	touch rule28
+rule29:
+	sleep 1
+	touch rule29
+rule30:
+	sleep 1
+	touch rule30
+rule31:
+	sleep 1
+	touch rule31
+rule32:
+	sleep 1
+	touch rule32
+rule33:
+	sleep 1
+	touch rule33
+rule34:
+	sleep 1
+	touch rule34
+rule35:
+	sleep 1
+	touch rule35
+rule36:
+	sleep 1
+	touch rule36
+rule37:
+	sleep 1
+	touch rule37
+rule38:
+	sleep 1
+	touch rule38
+rule39:
+	sleep 1
+	touch rule39

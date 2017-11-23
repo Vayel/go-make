@@ -1,5 +1,5 @@
 N_RULES = 10
-SLEEP = 2
+SLEEP = 1
 
 print('all: rule0')
 print('\tsleep', SLEEP)

@@ -1,47 +1,47 @@
 all: rule0
-	sleep 2
-	touch /tmp/go-makes/outputfiles/all
+	sleep 1
+	touch all
 
 rule0: rule1
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule0
+	sleep 1
+	touch rule0
 
 rule1: rule2
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule1
+	sleep 1
+	touch rule1
 
 rule2: rule3
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule2
+	sleep 1
+	touch rule2
 
 rule3: rule4
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule3
+	sleep 1
+	touch rule3
 
 rule4: rule5
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule4
+	sleep 1
+	touch rule4
 
 rule5: rule6
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule5
+	sleep 1
+	touch rule5
 
 rule6: rule7
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule6
+	sleep 1
+	touch rule6
 
 rule7: rule8
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule7
+	sleep 1
+	touch rule7
 
 rule8: rule9
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule8
+	sleep 1
+	touch rule8
 
 rule9: rule10
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule9
+	sleep 1
+	touch rule9
 
 rule10:
-	sleep 2
-	touch /tmp/go-makes/outputfiles/rule10
+	sleep 1
+	touch rule10
