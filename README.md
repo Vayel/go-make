@@ -75,6 +75,8 @@ make run_slave1
 
 # Run on Grid5000
 
+For each script, run it without parameter to show the help.
+
 ```bash
 # Connect to grid5000
 ssh <login>@access.grid5000.fr
@@ -134,6 +136,17 @@ python3 test.py 1 2 1 2 ~/go-make/makefiles/1
 
 * `~/measures.json` contains the measures
 * `~/go-make/logs` contains the same elements as in *Parallel* section
+
+### Plot measures
+
+Gnuplot is required.
+
+Example:
+
+```bash
+# cd ~/go-make/scripts
+./plot.sh ~/measures.json .
+```
 
 # Supported Makefiles
 

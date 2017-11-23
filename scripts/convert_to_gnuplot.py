@@ -1,10 +1,12 @@
+import os
 import sys
 import json
 import math
 import statistics as stats
 
 
-TIMES_FNAME = None
+OUTPUT_DIR = None
+TIMES_FNAME = 'times.txt'
 SPEEDUPS_FNAME = 'speedups.txt'
 EFFICIENCIES_FNAME = 'efficiencies.txt'
 STUDENT_TABLE = {3: 2.92, 5: 2.132}
@@ -24,7 +26,7 @@ def error(l):
 
 
 def save_values(fname, values):
-    with open(fname, 'w') as f:
+    with open(os.path.join(OUTPUT_DIR, fname), 'w') as f:
         for n, line in sorted(values.items()):
             err = error(line)
             m = stats.mean(line)
@@ -62,7 +64,7 @@ def build_efficiencies(speedups):
 if __name__ == '__main__':
     try:
         path = sys.argv[1]
-        TIMES_FNAME = sys.argv[2]
+        OUTPUT_DIR = sys.argv[2]
     except IndexError:
         help()
         sys.exit(1)

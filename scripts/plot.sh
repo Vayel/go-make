@@ -8,6 +8,6 @@ then
 fi
 
 python3 convert_to_gnuplot.py "$1" "$2"
-./plot_one.sh times.png times.txt "Time (ms)" "$2"
-./plot_one.sh speedups.png speedups.txt "Speedup" "$2"
-./plot_one.sh efficiencies.png efficiencies.txt "Efficiency" "$2"
+./plot_one.sh "$2/times.png" "$2/times.txt" "Time (ms)"
+./plot_one.sh "$2/speedups.png" "$2/speedups.txt" "Speedup"
+./plot_one.sh "$2/efficiencies.png" "$2/efficiencies.txt" "Efficiency"
