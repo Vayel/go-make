@@ -2,7 +2,7 @@
 
 . ./common.sh
 
-nodes=$(cat $NODES_FILE)
+nodes=$(cat $UNIQ_NODES_FILE)
 > $NODES_FILE
 for node in $nodes
 do

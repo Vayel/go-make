@@ -11,5 +11,6 @@ fi
 BIN_DIR=~
 PROJECT_DIR=~/go-make
 GENERATED_FILES_DIR=/tmp
+UNIQ_NODES_FILE=~/uniq_nodes.txt
 NODES_FILE=~/nodes.txt
 MASTER_RPC_PORT=10000

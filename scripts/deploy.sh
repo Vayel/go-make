@@ -6,7 +6,8 @@
 # oarsub -I -l nodes=TODO,walltime=1 -t deploy
 
 . ./common.sh
-uniq $OAR_FILE_NODES > $NODES_FILE
+uniq $OAR_FILE_NODES > $UNIQ_NODES_FILE
+cat $UNIQ_NODES_FILE > $NODES_FILE
 
 # TODO: deploy a custom image?
 
