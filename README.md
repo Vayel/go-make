@@ -73,6 +73,48 @@ make run_slave1
 # Or: make run_slave2
 ```
 
+# Run on Grid5000
+
+```bash
+# Connect on grid5000
+ssh <login>@access.grid5000.fr
+
+# Connect on a site
+ssh <site>
+
+# Get nodes
+oarsub -I -l nodes=TODO,walltime=1 -t deploy
+
+# Clone the project in the NFS (Network File System)
+cd ~
+git clone https://github.com/Vayel/go-make
+
+# Deploy
+cd go-make/scripts
+./deploy.sh
+
+# Compile
+./compile.sh
+```
+
+## Sequential
+
+```bash
+# cd ~/go-make/scripts
+./sequential.sh ~/go-make/makefiles/1 all ~/go-make/logs/seq.json ~/go-make/logs/nodes/seq.txt
+```
+
+`~/go-make/logs/seq.json` contains the execution time. `~/go-make/logs/nodes/seq.txt`
+contains the name of the node used for computations.
+
+## Parallel
+
+TODO
+
+## Run tests
+
+TODO
+
 # Supported Makefiles
 
 This tool handles only basic Makefiles. All rules must look like:
