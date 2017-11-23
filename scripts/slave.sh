@@ -1,11 +1,11 @@
 #!/bin/sh
 
-if [[ -z "$1" ]]
+if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Usage:"
-    echo -e "\t./slave.sh log_dir"
+    echo -e "\t./slave.sh log_dir nodes_path"
     echo "Example:"
-    echo -e "\t./slave.sh ~/logs"
+    echo -e "\t./slave.sh ~/logs ~/logs/nodes/slaves.txt"
     exit
 fi
 
@@ -15,6 +15,7 @@ SLAVE_RPC_PORT=40000
 
 master=$(head -1 $NODES_FILE)
 slaves=$(cat $NODES_FILE | tail -n +2 | head -$1)
+echo $slaves > $2
 
 for slave in $slaves
 do
