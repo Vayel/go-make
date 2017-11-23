@@ -4,6 +4,7 @@ masterport = 10000
 slaveaddr = localhost
 slaveport = 40000
 WORKING_DIR = tmp
+SRC_DIR = src
 
 all: master slave
 
@@ -13,25 +14,25 @@ prepare_compile:
 
 .PHONY: sequential
 sequential: prepare_compile
-	@cp common.go sequential/ # All .go files must be in the same folder
-	@cp parser.go sequential/
-	go build -o bin/sequential sequential/*.go
-	@rm sequential/common.go
-	@rm sequential/parser.go
+	@cp $(SRC_DIR)/common.go $(SRC_DIR)/sequential/ # All .go files must be in the same folder
+	@cp $(SRC_DIR)/parser.go $(SRC_DIR)/sequential/
+	go build -o bin/sequential $(SRC_DIR)/sequential/*.go
+	@rm $(SRC_DIR)/sequential/common.go
+	@rm $(SRC_DIR)/sequential/parser.go
 
 .PHONY: master
 master: prepare_compile
-	@cp common.go master/ # All .go files must be in the same folder
-	@cp parser.go master/
-	go build -o bin/master master/*.go
-	@rm master/common.go
-	@rm master/parser.go
+	@cp $(SRC_DIR)/common.go $(SRC_DIR)/master/ # All .go files must be in the same folder
+	@cp $(SRC_DIR)/parser.go $(SRC_DIR)/master/
+	go build -o bin/master $(SRC_DIR)/master/*.go
+	@rm $(SRC_DIR)/master/common.go
+	@rm $(SRC_DIR)/master/parser.go
 
 .PHONY: slave
 slave: prepare_compile
-	@cp common.go slave/ # All .go files must be in the same folder
-	go build -o bin/slave slave/*.go
-	@rm slave/common.go
+	@cp $(SRC_DIR)/common.go $(SRC_DIR)/slave/ # All .go files must be in the same folder
+	go build -o bin/slave $(SRC_DIR)/slave/*.go
+	@rm $(SRC_DIR)/slave/common.go
 
 .PHONY: prepare_run
 prepare_run:
