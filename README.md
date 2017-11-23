@@ -76,10 +76,10 @@ make run_slave1
 # Run on Grid5000
 
 ```bash
-# Connect on grid5000
+# Connect to grid5000
 ssh <login>@access.grid5000.fr
 
-# Connect on a site
+# Connect to a site
 ssh <site>
 
 # Get nodes
@@ -92,24 +92,35 @@ git clone https://github.com/Vayel/go-make
 # Deploy
 cd go-make/scripts
 ./deploy.sh
-
-# Compile
 ./compile.sh
 ```
 
 ## Sequential
+
+Example:
 
 ```bash
 # cd ~/go-make/scripts
 ./sequential.sh ~/go-make/makefiles/1 all ~/go-make/logs/seq.json ~/go-make/logs/nodes/seq.txt
 ```
 
-`~/go-make/logs/seq.json` contains the execution time. `~/go-make/logs/nodes/seq.txt`
-contains the name of the node used for computations.
+* `~/go-make/logs/seq.json` contains the execution time
+* `~/go-make/logs/nodes/seq.txt` contains the name of the node used for computations.
 
 ## Parallel
 
-TODO
+Example:
+
+```bash
+# cd ~/go-make/scripts
+./master.sh ~/go-make/makefiles/1 all ~/go-make/logs/master.json ~/go-make/logs/nodes/master.txt &
+./slave.sh 3 ~/go-make/logs ~/go-make/logs/nodes/slaves.txt
+```
+
+* `~/go-make/logs/master.json` contains the execution time of the master
+* `~/go-make/logs/slave_X.json` contains the execution times (total, working and waiting) of the slave X
+* `~/go-make/logs/nodes/master.txt` contains the name of the master node
+* `~/go-make/logs/nodes/slaves.txt` contains the name of the slave nodes
 
 ## Run tests
 
