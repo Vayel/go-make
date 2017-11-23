@@ -9,8 +9,8 @@ import time
 import shutil
 
 
-LOG_DIR = '~/go-make/logs'
-NODES_DIR = '~/go-make/logs/nodes'
+LOG_DIR = os.path.expanduser('~/go-make/logs')
+NODES_DIR = os.path.expanduser('~/go-make/logs/nodes')
 RESULT_PATH = os.path.expanduser('~/measures.json')
 SEQ_LOG = os.path.join(LOG_DIR, 'sequential.json')
 SEQ_NODE = os.path.join(NODES_DIR, 'sequential.txt')
@@ -18,7 +18,7 @@ MASTER_LOG = os.path.join(LOG_DIR, 'master.json')
 SLAVE_LOG_PATTERN = os.path.join(LOG_DIR, 'slave_*.json')
 FIRST_RULE = 'all'
 
-os.makedirs(os.path.expanduser(LOG_DIR), exist_ok=True)
+os.makedirs(NODES_DIR, exist_ok=True)
 
 def help():
     print('Usage:')
@@ -46,7 +46,7 @@ def run_para(n_slaves, makefile_path):
 
 
 def run_seq(makefile_path):
-    print('Running sequential', end='\n\n')
+    print('Running sequential...', end='\n\n')
 
     ret = subprocess.call([
         "./sequential.sh",
@@ -58,7 +58,7 @@ def run_seq(makefile_path):
     if ret: # Error
         return
 
-    with open(os.path.expanduser(SEQ_LOG)) as f:
+    with open(SEQ_LOG) as f:
         mes = json.load(f)
 
     return mes['total']
@@ -66,9 +66,9 @@ def run_seq(makefile_path):
 
 def clean_logs():
     print('Cleaning log dir...')
-    for f in glob.glob(os.path.expanduser(os.path.join(LOG_DIR, "*.json"))):
+    for f in glob.glob(os.path.join(LOG_DIR, "*.json")):
         os.remove(f)
-    for f in glob.glob(os.path.expanduser(os.path.join(NODES_DIR, "*.txt"))):
+    for f in glob.glob(os.path.join(NODES_DIR, "*.txt")):
         os.remove(f)
 
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
         clean_logs()
         mes = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
-        n = len(glob.glob(os.path.expanduser(SLAVE_LOG_PATTERN)))
+        n = len(glob.glob(SLAVE_LOG_PATTERN))
         if n != n_slaves:
             print('Invalid number of slave log files ({0} instead of {1})'.format(n, n_slaves))
         measures[n_slaves] = mes
