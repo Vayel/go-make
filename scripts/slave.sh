@@ -12,8 +12,8 @@ fi
 SLAVE_RPC_PORT=40000
 OUTPUT_DIR=/tmp
 
-master=$(head -1 $NODES)
-slaves=$(cat $NODES | tail -n +2 | head -$1)
+master=$(head -1 $NODES_FILE)
+slaves=$(cat $NODES_FILE | tail -n +2 | head -$1)
 
 for slave in $slaves
 do

@@ -9,5 +9,6 @@ then
 fi
 
 BIN_DIR=~/
-NODES=`uniq $OAR_FILE_NODES`
+NODES_FILE=~/nodes.txt
+uniq $OAR_FILE_NODES > $NODES_FILE
 MASTER_RPC_PORT=10000
