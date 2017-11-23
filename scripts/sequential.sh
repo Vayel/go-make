@@ -10,4 +10,4 @@ fi
 . ./common.sh
 
 node=$(head -1 $NODES_FILE)
-taktuk -m $node broadcast exec [ "$BIN_DIR/sequential $1 $2 $3" ] 
+taktuk -m $node broadcast exec [ "cd $GENERATED_FILES_DIR; $BIN_DIR/sequential $1 $2 $3" ] 

@@ -51,15 +51,15 @@ func work(task Task) (err error) {
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port dependency-dir logdir")
+	fmt.Println("\tslave master-rpc-addr master-rpc-port slave-rpc-addr slave-rpc-port log-dir")
 	fmt.Println("\nExample:")
-	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 outputfiles/ logdir/")
+	fmt.Println("\tslave 129.6.12.82 10000 129.6.12.81 40000 ~/logs/")
 }
 
 func main() {
 	hasTask = make(chan bool, 1)
 
-	if len(os.Args) != 7 {
+	if len(os.Args) != 6 {
 		fmt.Println("Bad number of arguments:", os.Args)
 		help()
 		os.Exit(1)
@@ -130,7 +130,7 @@ func main() {
         }
 		workTime += time.Since(startWorkTime)
 
-		fileResult, err := ReadFile(path.Join(dependencyDir, task.Rule.Target))
+		fileResult, err := ReadFile(task.Rule.Target)
 		if err != nil {
 			fmt.Println("Error reading file", err)
             break
@@ -148,7 +148,7 @@ func main() {
 		task = Task{}
 	}
 
-	logfile, errf := os.Create(path.Join(os.Args[6], "time_slave_" + slaveAddr + "_" + slavePort + ".json"))
+	logfile, errf := os.Create(path.Join(os.Args[5], "slave_" + slaveAddr + "_" + slavePort + ".json"))
 	if errf != nil {
 		fmt.Println(errf)
         os.Exit(1)

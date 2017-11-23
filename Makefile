@@ -1,16 +1,18 @@
 target = all
-output = outputfiles/
 masteraddr = localhost
 masterport = 10000
 slaveaddr = localhost
 slaveport = 40000
-logfile = log.json
+WORKING_DIR = tmp
 
 all: master slave
 
-.PHONY: sequential
-sequential:
+.PHONY: prepare_compile
+prepare_compile:
 	@mkdir -p bin
+
+.PHONY: sequential
+sequential: prepare_compile
 	@cp common.go sequential/ # All .go files must be in the same folder
 	@cp parser.go sequential/
 	go build -o bin/sequential sequential/*.go
@@ -18,8 +20,7 @@ sequential:
 	@rm sequential/parser.go
 
 .PHONY: master
-master:
-	@mkdir -p bin
+master: prepare_compile
 	@cp common.go master/ # All .go files must be in the same folder
 	@cp parser.go master/
 	go build -o bin/master master/*.go
@@ -27,30 +28,38 @@ master:
 	@rm master/parser.go
 
 .PHONY: slave
-slave:
-	@mkdir -p bin
+slave: prepare_compile
 	@cp common.go slave/ # All .go files must be in the same folder
 	go build -o bin/slave slave/*.go
 	@rm slave/common.go
 
+.PHONY: prepare_run
+prepare_run:
+	@mkdir -p $(WORKING_DIR)
+
 .PHONY: run_seq
-run_seq:
-	@./bin/sequential $(filter-out run_seq, $(MAKECMDGOALS)) $(target) $(logfile)
+run_seq: prepare_run
+	@cd $(WORKING_DIR); \
+	../bin/sequential $(filter-out run_seq, $(MAKECMDGOALS)) $(target) sequential.json
 
 .PHONY: run_slave1
-run_slave1:
-	@./bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40000 $(output)
+run_slave1: prepare_run
+	@cd $(WORKING_DIR); \
+	../bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40000 .
 
 .PHONY: run_slave2
-run_slave2:
-	@./bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40001 $(output)
+run_slave2: prepare_run
+	@cd $(WORKING_DIR); \
+	../bin/slave $(masteraddr) $(masterport) $(slaveaddr) 40001 .
 
 .PHONY: run_master
-run_master:
-	./bin/master $(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) $(output) $(logfile)
+run_master: prepare_run
+	@cd $(WORKING_DIR); \
+	../bin/master $(filter-out run_master, $(MAKECMDGOALS)) $(target) $(masterport) master.json
 
 clean:
 	@rm -r bin
+	@rm -r $(WORKING_DIR)
 
 %:
 	@:

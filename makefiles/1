@@ -1,3 +1,2 @@
-
 all:
-	echo "all" > /tmp/go-make/outputfiles/all
+	echo "all" > all

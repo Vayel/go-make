@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net"
 	"net/rpc"
-	"path"
     "sync"
     "errors"
 )
@@ -44,7 +43,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 
     requiredFiles := make(RequiredFiles)
     for _, dependency := range rule.Dependencies {
-        requiredFiles[dependency], err = ReadFile(path.Join(resultDir, dependency))
+        requiredFiles[dependency], err = ReadFile(dependency)
         if err != nil {
             fmt.Println("Error reading dependency:", err)
             return
@@ -58,7 +57,7 @@ func (m *MasterService) GiveTask(slave *Slave, reply *Task) (err error) {
 func (m *MasterService) ReceiveResult(result *Result, end *bool) error {
 	fmt.Println("Start ReceiveResult")
 	*end = false
-	WriteFile(path.Join(resultDir, result.Rule.Target), result.Output)
+	WriteFile(result.Rule.Target, result.Output)
 
     m.reqMutex.Lock()
     defer m.reqMutex.Unlock()

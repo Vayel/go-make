@@ -5,7 +5,6 @@ import (
 	"net/rpc"
 	"os"
 	"time"
-    "path"
 )
 
 // Use a map to efficiently determine if a rule has been executed
@@ -17,14 +16,13 @@ var readyRules Rules // Use a map to avoid duplicates
 var executedRules ExecutedRules
 var firstTarget string
 var done chan bool
-var resultDir string
 
 func help() {
 	fmt.Println("Help:")
-	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port result-dir log-dir")
+	fmt.Println("\tmaster path-to-makefile rule-to-execute rpc-port log-path")
 	fmt.Println("\nExamples:")
-	fmt.Println("\tmaster Makefile all 10000 outputfiles/ logdir/")
-	fmt.Println("\tmaster ../MyMakefile test.c 10000 dir/outputfiles/ logdir/")
+	fmt.Println("\tmaster Makefile all 10000 ~/logdir/")
+	fmt.Println("\tmaster ../MyMakefile test.c 10000 /tmp/logdir/master.json")
 }
 
 // With this function, we can easily access the parents of a given rule, that is
@@ -84,19 +82,13 @@ func terminate() {
 }
 
 func main() {
-	if len(os.Args) != 6 {
+	if len(os.Args) != 5 {
 		fmt.Println("Invalid number of arguments:", os.Args)
 		help()
 		os.Exit(1)
 	}
 
 	startTime := time.Now()
-
-	resultDir = os.Args[4]
-	if stat, err := os.Stat(resultDir); err != nil || !stat.IsDir() {
-		fmt.Println("Result directory does not exist: " + resultDir)
-		os.Exit(1)
-	}
 
 	path_ := os.Args[1]
 	f, err := os.Open(path_)
@@ -134,7 +126,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	logfile, errf := os.Create(path.Join(os.Args[5], "time_master.json"))
+	logfile, errf := os.Create(os.Args[4])
 	if errf != nil {
 		panic(errf)
 	}

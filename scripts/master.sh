@@ -9,7 +9,5 @@ fi
 
 . ./common.sh
 
-OUTPUT_DIR=/tmp
-
 master=$(head -1 $NODES_FILE)
-taktuk -m $master broadcast exec [ "$BIN_DIR/master $1 $2 $MASTER_RPC_PORT $OUTPUT_DIR $3" ] 
+taktuk -m $master broadcast exec [ "cd $GENERATED_FILES_DIR; $BIN_DIR/master $1 $2 $MASTER_RPC_PORT $3" ] 
