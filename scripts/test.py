@@ -12,10 +12,15 @@ import shutil
 LOG_DIR = os.path.expanduser('~/go-make/logs')
 NODES_DIR = os.path.expanduser('~/go-make/logs/nodes')
 RESULT_PATH = os.path.expanduser('~/measures.json')
-SEQ_LOG = os.path.join(LOG_DIR, 'sequential.json')
+
 SEQ_NODE = os.path.join(NODES_DIR, 'sequential.txt')
+MASTER_NODE = os.path.join(NODES_DIR, 'master.txt')
+SLAVE_NODES = os.path.join(NODES_DIR, 'slaves.txt')
+
+SEQ_LOG = os.path.join(LOG_DIR, 'sequential.json')
 MASTER_LOG = os.path.join(LOG_DIR, 'master.json')
 SLAVE_LOG_PATTERN = os.path.join(LOG_DIR, 'slave_*.json')
+
 FIRST_RULE = 'all'
 
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -28,11 +33,18 @@ def help():
     print('\tpython3 test.py 14 29 5 5 ~/go-make/makefiles/xxx')
 
 
-def launch_master(q, makefile_path, rule):
-    ret = subprocess.call(["./launch_master.sh", makefile_path, rule, MASTER_LOG])
+def launch_master(q, makefile_path):
+    ret = subprocess.call([
+        "./master.sh",
+        makefile_path,
+        FIRST_RULE,
+        MASTER_LOG,
+        MASTER_NODE,
+    ])
     if ret: # Error
         return
-    with open(os.path.join(LOG_DIR, 'time_master.json')) as f:
+
+    with open(MASTER_LOG) as f:
         data = json.load(f)
         q.put(data['total'])
 
@@ -42,7 +54,12 @@ def run_para(n_slaves, makefile_path):
     q = queue.Queue() # allows to get return value of the thread
     threading.Thread(target=launch_master, args=[q, makefile_path]).start()
     time.sleep(3) # wait for master to start
-    subprocess.Popen(["./launch_slave.sh",  str(n_slaves)])
+    subprocess.Popen([
+        "./slave.sh",
+        str(n_slaves),
+        LOG_DIR,
+        SLAVE_NODES,
+    ])
     return q.get()
 
 
@@ -101,9 +118,6 @@ if __name__ == '__main__':
     # the computations
     with open(RESULT_PATH, 'w') as f:
         json.dump(measures, f, indent=4)
-
-
-    sys.exit(0) # TODO
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
         clean_logs()
