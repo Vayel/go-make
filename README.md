@@ -40,18 +40,30 @@ For the parallel one:
 make
 ```
 
-# Run
+# Run locally
 
-## Master
+## Sequential
 
 ```bash
-make run_master makefile-path
+make run_seq makefile-path-relative-to-tmp
 ```
 
 For instance:
 
 ```bash
-make run_master makefiles/8
+make run_seq ../makefiles/8
+```
+
+## Master
+
+```bash
+make run_master makefile-path-relative-to-tmp
+```
+
+For instance:
+
+```bash
+make run_master ../makefiles/8
 ```
 
 ## Slave
