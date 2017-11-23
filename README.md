@@ -124,7 +124,16 @@ Example:
 
 ## Run tests
 
-TODO
+Example:
+
+```bash
+# cd ~/go-make/scripts
+# use Python 3.4
+python3 test.py 1 2 1 2 ~/go-make/makefiles/1
+```
+
+* `~/measures.json` contains the measures
+* `~/go-make/logs` contains the same elements as in *Parallel* section
 
 # Supported Makefiles
 
