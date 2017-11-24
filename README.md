@@ -94,8 +94,6 @@ git clone https://github.com/Vayel/go-make
 # Deploy
 cd go-make/scripts
 ./deploy.sh
-./check_nodes.sh
-./compile.sh
 ```
 
 ## Sequential
