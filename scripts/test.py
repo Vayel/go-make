@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+from collections import defaultdict
 import subprocess
 import glob
 import threading
@@ -44,9 +45,14 @@ def launch_master(q, makefile_path):
     if ret: # Error
         return
 
+    data = {}
     with open(MASTER_LOG) as f:
-        data = json.load(f)
-        q.put(data['total'])
+        data['master'] = json.load(f)['total']
+    for f in glob.glob(SLAVE_LOG_PATTERN):
+        with open(f) as logfile:
+            key = os.path.splitext(f)[0]
+            data[key] = json.load(logfile)
+    q.put(data)
 
 
 def run_para(n_slaves, makefile_path):
@@ -121,10 +127,18 @@ if __name__ == '__main__':
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
         clean_logs()
-        mes = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
+        output = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
+
         n = len(glob.glob(SLAVE_LOG_PATTERN))
         if n != n_slaves:
             print('Invalid number of slave log files ({0} instead of {1})'.format(n, n_slaves))
+
+        mes = defaultdict(list) 
+        for rep in output:
+            for k, v in rep.items():
+                mes[k].append(v)
+
         measures[n_slaves] = mes
+
         with open(RESULT_PATH, 'w') as f:
             json.dump(measures, f, indent=4)
