@@ -16,3 +16,6 @@ taktuk -l root -s -o connector -o status -o output='"$host: $line\n"' -f $NODES_
 
 . ./check_nodes.sh
 . ./compile.sh
+
+echo -e "\nAvailable nodes: $(cat $NODES_FILE | wc -l)"
+cat $NODES_FILE
