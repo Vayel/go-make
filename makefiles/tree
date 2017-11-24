@@ -1,128 +1,128 @@
 
 all: one
 	sleep 1
-	echo "all" > /tmp/go-make/outputfiles/all
+	echo "all" > all
 
 one: two three
-	sleep 2
-	echo "one" > /tmp/go-make/outputfiles/one
+	sleep 1
+	echo "one" > one
 
 two: four five
 	sleep 1
-	echo "two" > /tmp/go-make/outputfiles/two
+	echo "two" > two
 
 three: six seven
 	sleep 1
-	echo "three" > /tmp/go-make/outputfiles/three
+	echo "three" > three
 
 four: eight nine
-	sleep 2
-	echo "four" > /tmp/go-make/outputfiles/four
+	sleep 1
+	echo "four" > four
 
 five: ten eleven
-	sleep 2
-	echo "five" > /tmp/go-make/outputfiles/five
+	sleep 1
+	echo "five" > five
 
 six: twelve thirteen
 	sleep 1
-	echo "six" > /tmp/go-make/outputfiles/six
+	echo "six" > six
 
 seven: fourteen fifteen
 	sleep 1
-	echo "seven" > /tmp/go-make/outputfiles/seven
+	echo "seven" > seven
 
 eight: sixteen seventeen
-	sleep 2
-	echo "eight" > /tmp/go-make/outputfiles/eight
+	sleep 1
+	echo "eight" > eight
 
 nine: eighteen nineteen
 	sleep 1
-	echo "nine" > /tmp/go-make/outputfiles/nine
+	echo "nine" > nine
 
 ten: twenty twentyone
 	sleep 1
-	echo "ten" > /tmp/go-make/outputfiles/ten
+	echo "ten" > ten
 
 eleven: twentytwo twentythree
 	sleep 1
-	echo "eleven" > /tmp/go-make/outputfiles/eleven
+	echo "eleven" > eleven
 
 twelve: twentyfour twentyfive
-	sleep 2
-	echo "twelve" > /tmp/go-make/outputfiles/twelve
+	sleep 1
+	echo "twelve" > twelve
 
 thirteen: twentysix twentyseven
-	sleep 2
-	echo "thirteen" > /tmp/go-make/outputfiles/thirteen
+	sleep 1
+	echo "thirteen" > thirteen
 
 fourteen: twentyeight twentynine
 	sleep 1
-	echo "fourteen" > /tmp/go-make/outputfiles/fourteen
+	echo "fourteen" > fourteen
 
 fifteen: thirty thirtyone
-	sleep 2
-	echo "fifteen" > /tmp/go-make/outputfiles/fifteen
+	sleep 1
+	echo "fifteen" > fifteen
 
 sixteen: 
 	sleep 1
-	echo "sixteen" > /tmp/go-make/outputfiles/sixteen
+	echo "sixteen" > sixteen
 
 seventeen:
 	sleep 1
-	echo "seventeen" > /tmp/go-make/outputfiles/seventeen
+	echo "seventeen" > seventeen
 
 eighteen:
-	sleep 2
-	echo "eighteen" > /tmp/go-make/outputfiles/eighteen
+	sleep 1
+	echo "eighteen" > eighteen
 
 nineteen: 
 	sleep 1
-	echo "nineteen" > /tmp/go-make/outputfiles/nineteen
+	echo "nineteen" > nineteen
 
 twenty: 
-	sleep 2
-	echo "twenty" > /tmp/go-make/outputfiles/twenty
+	sleep 1
+	echo "twenty" > twenty
 
 twentyone:
 	sleep 1
-	echo "twentyone" > /tmp/go-make/outputfiles/twentyone
+	echo "twentyone" > twentyone
 
 twentytwo: 
-	sleep 2
-	echo "twentytwo" > /tmp/go-make/outputfiles/twentytwo
+	sleep 1
+	echo "twentytwo" > twentytwo
 
 twentythree:
 	sleep 1
-	echo "twentythree" > /tmp/go-make/outputfiles/twentythree
+	echo "twentythree" > twentythree
 
 twentyfour: 
-	sleep 2
-	echo "twentyfour" > /tmp/go-make/outputfiles/twentyfour
+	sleep 1
+	echo "twentyfour" > twentyfour
 
 twentyfive: 
-	sleep 2
-	echo "twentyfive" > /tmp/go-make/outputfiles/twentyfive
+	sleep 1
+	echo "twentyfive" > twentyfive
 
 twentysix:
 	sleep 1
-	echo "twentysix" > /tmp/go-make/outputfiles/twentysix
+	echo "twentysix" > twentysix
 
 twentyseven:
 	sleep 1
-	echo "twentyseven" > /tmp/go-make/outputfiles/twentyseven
+	echo "twentyseven" > twentyseven
 
 twentyeight: 
 	sleep 1
-	echo "twentyeight" > /tmp/go-make/outputfiles/twentyeight
+	echo "twentyeight" > twentyeight
 
 twentynine:
-	sleep 2
-	echo "twentynine" > /tmp/go-make/outputfiles/twentynine
+	sleep 1
+	echo "twentynine" > twentynine
 
 thirty:
 	sleep 1
-	echo "thirty" > /tmp/go-make/outputfiles/thirty
+	echo "thirty" > thirty
 
 thirtyone:
-	sleep 2
-	echo "thirtyone" > /tmp/go-make/outputfiles/thirtyone
+	sleep 1
+	echo "thirtyone" > thirtyone
