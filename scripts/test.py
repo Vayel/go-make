@@ -81,7 +81,7 @@ def run_seq(makefile_path):
     ])
     if ret: # Error
         return
-
+    
     with open(SEQ_LOG) as f:
         mes = json.load(f)
 
@@ -127,16 +127,20 @@ if __name__ == '__main__':
 
     for n_slaves in range(MIN_N_SLAVES, MAX_N_SLAVES + 1, N_SLAVES_STEP):
         clean_logs()
-        output = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
+        outputs = [run_para(n_slaves, MAKEFILE) for _ in range(N_REPS)]
 
         n = len(glob.glob(SLAVE_LOG_PATTERN))
         if n != n_slaves:
             print('Invalid number of slave log files ({0} instead of {1})'.format(n, n_slaves))
 
-        mes = defaultdict(list) 
-        for rep in output:
-            for k, v in rep.items():
-                mes[k].append(v)
+        mes = {}
+        mes['master'] = [rep['master'] for rep in outputs]
+        slaves = list(outputs[0].keys()).remove('master')
+        for slave in slaves:
+            mes[slave] = defaultdict(list)
+            for rep in outputs:
+                for k, v in rep[slave].items():
+                    mes[slave][k].append(v)
 
         measures[n_slaves] = mes
 
