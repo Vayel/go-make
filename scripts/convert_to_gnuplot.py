@@ -40,7 +40,14 @@ def save_values(fname, values):
 
 
 def json_to_matrix(f):
-    return {int(k): v for k, v in json.load(f).items()}
+    data = json.load(f)
+    mat = {}
+    mat[0] = data['0']
+    for k, v in data.items():
+        k = int(k)
+        if k:
+            mat[k] = v['master']
+    return mat
 
 
 def build_speedups(measures, seq_time):
