@@ -135,7 +135,8 @@ if __name__ == '__main__':
 
         mes = {}
         mes['master'] = [rep['master'] for rep in outputs]
-        slaves = list(outputs[0].keys()).remove('master')
+        slaves = list(outputs[0].keys())
+        slaves.remove('master')
         for slave in slaves:
             mes[slave] = defaultdict(list)
             for rep in outputs:
