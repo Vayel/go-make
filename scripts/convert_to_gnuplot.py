@@ -9,7 +9,7 @@ OUTPUT_DIR = None
 TIMES_FNAME = 'times.txt'
 SPEEDUPS_FNAME = 'speedups.txt'
 EFFICIENCIES_FNAME = 'efficiencies.txt'
-STUDENT_TABLE = {3: 2.92, 5: 2.132}
+STUDENT_TABLE = {3: 2.92, 5: 2.132, 30: 1.697}
 
 class StudentTableError(ValueError): pass
 
