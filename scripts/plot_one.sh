@@ -21,7 +21,7 @@ MAX_SLAVES=`tail -n 1 "$2" | cut -d ' ' -f1`
 plot_args="'$2' u 1:2 notitle"
 
 # -1 because the last column is the average and is plotted differently
-for n in $(seq 3 $(($N_COLS-3)))
+for n in $(seq 3 10)
 do
   plot_args="$plot_args, '$2' u 1:$n notitle"
 done
